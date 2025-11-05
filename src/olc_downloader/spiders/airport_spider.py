@@ -41,44 +41,77 @@ class OLCAirportFlightsSpider(scrapy.Spider):
             self._load_existing_metadata()
 
     def _load_existing_metadata(self):
-        """Load existing metadata to determine which flights are already downloaded"""
-        metadata_path = self.output_dir / self.airport_code / self.year / "metadata.json"
+        """Load existing metadata AND scan filesystem to determine which flights are already downloaded"""
+        year_dir = self.output_dir / self.airport_code / self.year
+        metadata_path = year_dir / "metadata.json"
 
-        if not metadata_path.exists():
+        from_metadata = 0
+        from_filesystem = 0
+
+        # Step 1: Load from metadata.json
+        if metadata_path.exists():
+            try:
+                with open(metadata_path, 'r') as f:
+                    data = json.load(f)
+
+                for flight in data.get('flights', []):
+                    dsid = flight.get('dsid')
+                    filename = flight.get('filename')
+
+                    if dsid and filename:
+                        # Verify the file actually exists and is valid
+                        file_path = year_dir / filename
+                        if file_path.exists():
+                            # Quick validation: check it's not HTML
+                            try:
+                                with open(file_path, 'r', encoding='latin-1') as f:
+                                    first_line = f.readline().strip()
+                                    # Only skip if it's a valid IGC file
+                                    if first_line.startswith('A') or first_line.startswith('H'):
+                                        self.downloaded_dsids.add(dsid)
+                                        from_metadata += 1
+                                    else:
+                                        logger.debug(f"Skipping invalid file in metadata: {filename}")
+                            except:
+                                # If we can't read it, don't trust it
+                                logger.debug(f"Could not validate file in metadata: {filename}")
+
+            except Exception as e:
+                logger.warning(f"Failed to load metadata from {metadata_path}: {e}")
+        else:
             logger.info(f"No existing metadata found at {metadata_path}")
-            return
 
-        try:
-            with open(metadata_path, 'r') as f:
-                data = json.load(f)
+        # Step 2: Scan filesystem for IGC files not in metadata
+        # This catches files that were downloaded but metadata is incomplete/missing
+        if year_dir.exists():
+            for igc_file in year_dir.glob("*.igc"):
+                # Extract dsid from filename
+                # Format is typically: YEAR_PILOT_DSID.igc or similar
+                # dsid is usually the last part before .igc
+                filename_parts = igc_file.stem.split('_')
 
-            year_dir = self.output_dir / self.airport_code / self.year
+                if len(filename_parts) >= 2:
+                    # Try last part as dsid (most common format)
+                    potential_dsid = filename_parts[-1]
 
-            for flight in data.get('flights', []):
-                dsid = flight.get('dsid')
-                filename = flight.get('filename')
-
-                if dsid and filename:
-                    # Verify the file actually exists and is valid
-                    file_path = year_dir / filename
-                    if file_path.exists():
-                        # Quick validation: check it's not HTML
+                    # Only add if not already in our set (from metadata)
+                    if potential_dsid not in self.downloaded_dsids:
+                        # Validate it's a real IGC file
                         try:
-                            with open(file_path, 'r', encoding='latin-1') as f:
+                            with open(igc_file, 'r', encoding='latin-1') as f:
                                 first_line = f.readline().strip()
-                                # Only skip if it's a valid IGC file
                                 if first_line.startswith('A') or first_line.startswith('H'):
-                                    self.downloaded_dsids.add(dsid)
-                                else:
-                                    logger.debug(f"Skipping invalid file in metadata: {filename}")
+                                    self.downloaded_dsids.add(potential_dsid)
+                                    from_filesystem += 1
+                                    logger.debug(f"Added {potential_dsid} from filesystem scan: {igc_file.name}")
                         except:
-                            # If we can't read it, don't trust it
-                            logger.debug(f"Could not validate file in metadata: {filename}")
+                            logger.debug(f"Could not validate file from filesystem: {igc_file.name}")
 
-            logger.info(f"Loaded {len(self.downloaded_dsids)} already downloaded and verified flights from metadata")
+        total_flights = len(self.downloaded_dsids)
+        logger.info(f"Loaded {total_flights} already downloaded flights ({from_metadata} from metadata, {from_filesystem} from filesystem scan)")
 
-        except Exception as e:
-            logger.warning(f"Failed to load metadata from {metadata_path}: {e}")
+        if from_filesystem > 0:
+            logger.info(f"Found {from_filesystem} flights in filesystem not in metadata - will not re-scrape these")
 
     def start_requests(self):
         """Start request using JSON API for pagination"""
