@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Minimap Test</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body { margin: 20px; font-family: sans-serif; }
+        #minimap { width: 360px; height: 180px; border: 1px solid #ccc; }
+        .info { margin: 20px 0; padding: 10px; background: #f0f0f0; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>Satellite Minimap Test</h1>
+    <div class="info">
+        <strong>Test:</strong> This page tests if ArcGIS HTTPS satellite tiles load correctly.<br>
+        <strong>Location:</strong> Sterling Airport (42.42617°, -71.79383°)
+    </div>
+    <div id="minimap"></div>
+    <div class="info" id="status">Initializing map...</div>
+
+    <script>
+        try {
+            // Create minimap
+            var minimap = L.map('minimap', {
+                center: [42.42617, -71.79383],
+                zoom: 16,
+                zoomControl: true
+            });
+
+            // Add HTTPS satellite tile layer
+            var tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Esri',
+                maxZoom: 19,
+                errorTileUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgZmlsbD0iI2YwZjBmMCIvPjwvc3ZnPg=='
+            }).addTo(minimap);
+
+            // Add center marker
+            L.circleMarker([42.42617, -71.79383], {
+                radius: 6,
+                fillColor: '#E53E3E',
+                color: 'white',
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.9
+            }).addTo(minimap);
+
+            // Listen for tile load events
+            var tilesLoaded = 0;
+            var tilesErrored = 0;
+
+            tileLayer.on('tileload', function() {
+                tilesLoaded++;
+                document.getElementById('status').innerHTML =
+                    '<span style="color: green;">✓ Map initialized successfully!</span><br>' +
+                    'Tiles loaded: ' + tilesLoaded + ' | Errors: ' + tilesErrored;
+            });
+
+            tileLayer.on('tileerror', function(e) {
+                tilesErrored++;
+                console.error('Tile load error:', e);
+                document.getElementById('status').innerHTML =
+                    '<span style="color: red;">✗ Tile loading errors detected!</span><br>' +
+                    'Tiles loaded: ' + tilesLoaded + ' | Errors: ' + tilesErrored + '<br>' +
+                    'Check browser console for details.';
+            });
+
+            setTimeout(function() {
+                if (tilesLoaded === 0) {
+                    document.getElementById('status').innerHTML =
+                        '<span style="color: orange;">⚠ No tiles loaded yet...</span><br>' +
+                        'This might indicate CORS blocking or network issues. Check browser console.';
+                }
+            }, 3000);
+
+        } catch(e) {
+            document.getElementById('status').innerHTML =
+                '<span style="color: red;">✗ Error: ' + e.message + '</span>';
+            console.error('Minimap initialization error:', e);
+        }
+    </script>
+</body>
+</html>

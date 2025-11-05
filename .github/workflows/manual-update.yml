@@ -1,0 +1,155 @@
+name: Manual Map Update
+
+on:
+  workflow_dispatch:
+    inputs:
+      airport_code:
+        description: 'Airport code (e.g., STERL1)'
+        required: true
+        default: 'STERL1'
+      year:
+        description: 'Specific year to process (leave empty for all years)'
+        required: false
+      min_points:
+        description: 'Minimum points filter'
+        required: false
+      skip_download:
+        description: 'Skip downloading flights (use existing data)'
+        required: false
+        type: boolean
+        default: false
+      skip_satellite_tiles:
+        description: 'Skip satellite tile generation'
+        required: false
+        type: boolean
+        default: false
+      force_regenerate:
+        description: 'Force regenerate everything (ignore deduplication)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  manual-update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180  # 3 hour timeout for full regeneration
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install boto3
+
+      - name: Install Playwright browsers
+        if: ${{ !inputs.skip_download }}
+        run: |
+          playwright install chromium
+          playwright install-deps chromium
+
+      - name: Configure OLC credentials
+        if: ${{ !inputs.skip_download }}
+        env:
+          OLC_USERNAME: ${{ secrets.OLC_USERNAME }}
+          OLC_PASSWORD: ${{ secrets.OLC_PASSWORD }}
+        run: |
+          mkdir -p ~/.olc-downloader
+          cat > ~/.olc-downloader/config.env << EOF
+          OLC_USERNAME=$OLC_USERNAME
+          OLC_PASSWORD=$OLC_PASSWORD
+          EOF
+          chmod 600 ~/.olc-downloader/config.env
+
+      - name: Configure R2 credentials
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_PUBLIC_DOMAIN: ${{ secrets.R2_PUBLIC_DOMAIN }}
+        run: |
+          cat > .env << EOF
+          R2_ACCOUNT_ID=$R2_ACCOUNT_ID
+          R2_ACCESS_KEY_ID=$R2_ACCESS_KEY_ID
+          R2_SECRET_ACCESS_KEY=$R2_SECRET_ACCESS_KEY
+          R2_PUBLIC_DOMAIN=$R2_PUBLIC_DOMAIN
+          EOF
+
+      - name: Download existing data from R2
+        if: ${{ inputs.skip_download }}
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          echo "Downloading existing flight data from R2..."
+          python scripts/r2_sync.py download --include-flights
+
+      - name: Generate map
+        env:
+          AIRPORT_CODE: ${{ inputs.airport_code }}
+          YEAR: ${{ inputs.year }}
+          MIN_POINTS: ${{ inputs.min_points }}
+          SKIP_DOWNLOAD: ${{ inputs.skip_download }}
+          SKIP_SAT_TILES: ${{ inputs.skip_satellite_tiles }}
+          FORCE: ${{ inputs.force_regenerate }}
+        run: |
+          echo "Generating map for airport: $AIRPORT_CODE"
+
+          # Build command with optional parameters
+          CMD="python -m olc_downloader.cli map --airport-code $AIRPORT_CODE"
+
+          [ -n "$YEAR" ] && CMD="$CMD --year $YEAR"
+          [ -n "$MIN_POINTS" ] && CMD="$CMD --min-points $MIN_POINTS"
+          [ "$SKIP_DOWNLOAD" = "true" ] && CMD="$CMD --skip-download"
+          [ "$SKIP_SAT_TILES" = "true" ] && CMD="$CMD --skip-satellite-tiles"
+          [ "$FORCE" = "true" ] && CMD="$CMD --force"
+
+          # Add deployment mode and no-upload flag
+          CMD="$CMD --deployment-mode static --no-upload --verbose"
+
+          echo "Running: $CMD"
+          eval $CMD
+
+      - name: Upload to R2
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          echo "Uploading to R2..."
+          python -m olc_downloader.cli upload-to-r2 --all --verbose
+
+      - name: Display public URL
+        env:
+          R2_PUBLIC_DOMAIN: ${{ secrets.R2_PUBLIC_DOMAIN }}
+          AIRPORT_CODE: ${{ inputs.airport_code }}
+        run: |
+          DOMAIN="${R2_PUBLIC_DOMAIN:-pub-32af5705466c411d82c79b436565f4a9.r2.dev}"
+          echo "==================================="
+          echo "Map Update Complete!"
+          echo "==================================="
+          echo ""
+          echo "Public URL: https://$DOMAIN/maps/${AIRPORT_CODE}_map.html"
+          echo ""
+          if [ -f downloads/${AIRPORT_CODE}_map.html ]; then
+            echo "Map file generated: downloads/${AIRPORT_CODE}_map.html"
+          fi
+
+      - name: Upload logs as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manual-update-logs-${{ github.run_number }}
+          path: |
+            *.log
+            downloads/*.html
+          retention-days: 30

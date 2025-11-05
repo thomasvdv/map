@@ -1,0 +1,491 @@
+       Map marking information for Sterling, Massachusetts
+
+                    Courtesy of Taylor Strack
+
+
+        Non-Control Point Waypoints are indicated by a *
+
+
+
+         Latitude range:     40   48.0   to     45    5.1
+        Longitude range:    -74   34.7   to    -69   42.8
+
+         File created Tuesday, 08 July 2025 at 15:58 GMT
+
+                UNOFFICIAL, USE AT YOUR OWN RISK
+
+    Do not use for navigation, for flight verification only.
+
+Always consult the relevant publications for current and correct
+information. This service is provided free of charge with no warrantees,
+                      expressed or implied.
+                  User assumes all risk of use.
+
+
+Sectionals  required:  Arrow Field, Montreal, New York, New Hamp-
+            shire, and Owner Mike Farrey: 6032668860
+
+
+             Way Point             Latitude        Longitude      Distance   Bearing      Description                 Sectional
+*    Morristown                  40   48.0   N    74   24.9   W     176        231
+*    Lincoln Park                40   56.9   N    74   18.9   W     165        233
+*    Essex County                40   52.5   N    74   16.9   W     167        231
+*    Lewis Landing               41   24.4   N    74   32.0   W     157        244
+*    MD1                         41   22.0   N    74   31.1   W     158        243
+*    Randall                     41   25.9   N    74   23.5   W     150        244
+*    Greenwood Lake              41    7.7   N    74   20.8   W     159        237
+*    Hill Top                    41    5.0   N    74   20.3   W     161        236
+*    Orange Poultry Farm         41   19.7   N    74   19.5   W     151        241
+*    Warwick                     41   17.2   N    74   17.2   W     151        239
+*    Mahopac                     41   22.9   N    73   45.9   W     124        235     01/19 18T            New York
+*    Westchester County          41    4.0   N    73   42.5   W     136        227
+*    Danbury Muni                41   22.3   N    73   28.9   W     113        231     08/26 44A            New York
+*    Flying Ridge                41   22.1   N    73   17.5   W     106        227     N/S 20T              New York
+*    Waterbury-Oxford            41   28.8   N    73    8.1   W      95        227     13/31 20A            New York
+*    Igor I Sikorsky             41    9.8   N    73    7.6   W     111        219
+*    Tweed-New Haven             41   15.8   N    72   53.2   W      98        215     02/20 56A            New York
+31   Maplewood                   41   28.1   N    72   42.5   W      81        216     15/33 14T            New York
+*    Griswold                    41   16.3   N    72   33.0   W      89        206     06/24 19A            New York
+*    Chester                     41   23.0   N    72   30.4   W      81        207     17/35 26A            New York
+*    Goodspeed                   41   26.7   N    72   27.3   W      76        207     14/32 21A            New York
+*    Devils Hopyard              41   26.6   N    72   20.3   W      73        203     N/S 13T              New York
+*    Mile Creek                  41   18.1   N    72   17.8   W      82        199
+*    Groton-New London           41   19.8   N    72    2.7   W      77        190     05/23 50A            New York
+24   Wychwood Field              41   26.2   N    71   55.5   W      69        186     18/36 18T            New York
+*    Stonington Airpark          41   20.8   N    71   53.1   W      75        184     04/22 17T            New York
+*    Westerly                    41   21.0   N    71   48.2   W      74        180     07/25 40A            New York
+*    Richmond                    41   29.3   N    71   37.2   W      65        172     11/29 21A            New York
+*    Wurtsboro-Sullivan County   41   35.8   N    74   27.5   W     148        248
+*    Joseph Y Resnick            41   43.7   N    74   22.6   W     141        251
+*    Piolis Brookside            41   51.9   N    74   20.0   W     136        254
+*    Orange County               41   30.7   N    74   15.8   W     142        244
+*    Gardiner                    41   40.0   N    74    9.0   W     132        247
+*    Kobelt                      41   37.5   N    74    8.5   W     133        246
+*    Sheeley’s Farm              41   49.9   N    74    7.8   W     127        252
+*    Stanton                     41   45.0   N    74    7.0   W     128        249
+*    Stewart                     41   30.2   N    74    6.3   W     135        243
+*    Old Orchard                 41   39.4   N    74    4.6   W     129        246
+*    Kingston-Ulster             41   59.1   N    73   57.9   W     115        255
+*    Dutchess Cnty               41   37.6   N    73   53.0   W     121        243     06/24 50A            New York
+*    Airhaven                    41   50.0   N    73   52.6   W     114        250     02/20 18T            New York
+*    Old Rhinebeck               41   58.3   N    73   51.8   W     110        254     N/S 22D              New York
+*    Sherman                     41   38.3   N    73   44.6   W     114        242     18/36 16G            New York
+*    Sky Acres NY                41   42.4   N    73   44.3   W     111        244     17/35 38A            New York
+*    Stormville                  41   34.6   N    73   43.9   W     116        240     06/24 33A            New York
+*    Johnson Landing             41   49.1   N    73   38.6   W     104        247
+*    Winchell Mountain           41   56.9   N    73   31.1   W      94        250
+36   Candlelight                 41   34.0   N    73   28.0   W     104        236     16/34 29T            New York
+*    Docktors Field              41   32.0   N    73   25.0   W     104        234     N/S 20T              New York
+*    Ripley Field                41   47.1   N    73   18.5   W      89        241     17/35 20T            New York
+*    Canterbury Farm             41   30.5   N    73   18.5   W     100        231     18/36 14T            New York
+*    Clouds Hill                 41   40.0   N    73   17.0   W      93        236     13/31 14T            New York
+*    Wings Ago Air               41   51.2   N    73   16.5   W      86        243     18/36 16T            New York
+*    Good Hill Farm              41   33.0   N    73   16.0   W      97        232     N/S 27T              New York
+*    Irish Hills Farms           41   36.6   N    73   14.4   W      93        233
+*    Thomson                     41   37.9   N    73   13.0   W      91        234
+*    Whelan Farms                41   40.0   N    73   11.3   W      89        234     01/19 14T            New York
+33   Waterbury                   41   38.0   N    73    2.8   W      84        230     02/20 16T            New York
+*    Mountain Meadow             41   46.2   N    73    0.6   W      77        234     01/19 34A            New York
+*    Green Acres CT              41   42.5   N    72   58.2   W      78        231     16/34 18A            New York
+28   Robertson                   41   41.4   N    72   51.9   W      75        228     02/20 36A            New York
+*    Meriden Markham             41   30.5   N    72   49.8   W      83        220     18/36 31A            New York
+*    Simsbury                    41   54.9   N    72   46.6   W      61        235     03/21 22A            New York
+*    Bradley Intl                41   56.3   N    72   41.0   W      57        234     01/19 51A            New York
+*    Hartford-Brainard           41   44.2   N    72   39.0   W      65        223     02/20 44A            New York
+*    Rentschler                  41   45.1   N    72   37.5   W      63        223     04/22 73A            New York
+*    Roberts Farm                41   53.4   N    72   36.9   W      56        229     08/26 20T            New York
+*    Bancroft                    41   52.0   N    72   36.6   W      57        227     13/31 18T            New York
+*    Skylark Airport             41   55.7   N    72   34.6   W      53        230     10/28 26A            New York
+*    Wysocki Field               41   56.7   N    72   28.6   W      48        227     18/36 18T            New York
+*    Ellington                   41   55.5   N    72   27.4   W      48        225     01/19 18A            New York
+*    Salmon River                41   35.4   N    72   26.5   W      67        210     17/35 20T            New York
+*    Rankl Field                 41   36.0   N    72   26.0   W      66        210                          New York
+*    Heckler Field               41   48.2   N    72   23.5   W      53        216     16/34 14T            New York
+*    Skis Landing                41   34.4   N    72   18.2   W      64        204     09/27 15T            New York
+*    Metenosky Aviation          41   44.9   N    72   17.8   W      54        209                          New York
+*    Gardner Lake                41   30.5   N    72   14.6   W      68        200     16/34 19T            New York
+*    Gager Field                 41   33.9   N    72   11.8   W      63        199     02/20 22T            New York
+*    Westford Air                41   57.1   N    72   10.9   W      38        211     N/S 13T              New York
+19   Windham                     41   44.7   N    72   10.8   W      51        203     09/27 43A            New York
+*    Toutant                     41   57.3   N    72    3.3   W      35        202     17/35 18S            New York
+*    Woodstock                   41   55.3   N    71   57.2   W      36        193     01/19 22A            New York
+12   Danielson                   41   49.2   N    71   54.0   W      42        187     13/31 27A            New York
+*    Lake Rd Power               41   52.4   N    71   53.7   W      39        188
+*    Gallup Farm                 41   32.1   N    71   50.1   W      62        182     N/S 20T              New York
+*    Riconn                      41   41.8   N    71   47.0   W      50        179     09/27 16T            New York
+*    Mystery Farm                41   44.0   N    71   31.7   W      50        164     17/35 7T             Montreal
+*    North Central               41   55.2   N    71   29.6   W      38        156     05/23 50A            New York
+*    Theodore Francis Green      41   43.4   N    71   25.6   W      52        159     05/23 72A            New York
+*    Quonset                     41   35.8   N    71   24.7   W      61        161     05/23 40A            New York
+*    Newport RI                  41   31.9   N    71   16.9   W      67        157     04/22 30A            New York
+14   Mansfield                   42    0.0   N    71   11.8   W      42        134     04/22 22T            New York
+*    Wing-Over Farm              41   34.7   N    71    8.5   W      67        150     N/S 12T              New York
+*    Westport 2                  41   32.6   N    71    2.1   W      72        147     17/35 22T            New York
+*    Allen’s Pond                41   30.7   N    71    1.7   W      74        148     13/31 12T            New York
+*    Myricks                     41   50.3   N    71    1.6   W      57        136     09/27 22T            New York
+21   Taunton Muni                41   52.5   N    71    1.0   W      55        133     04/22 16T            New York
+*    New Bedford                 41   40.6   N    70   57.4   W      67        140     05/23 50A            New York
+*    Bulljump                    41   48.4   N    70   45.5   W      68        129     04/22 12T            New York
+23   Plymouth MA                 41   54.6   N    70   43.7   W      65        123     06/24 35A            New York
+*    Falmouth Air                41   35.1   N    70   32.5   W      87        132
+*    Otis ANGB                   41   39.5   N    70   31.3   W      84        129
+*    Cape Cod                    41   41.2   N    70   24.2   W      88        125
+*    Barnstable M                41   40.1   N    70   16.8   W      94        123
+*    Chatham Muni                41   41.3   N    69   59.4   W     106        118
+*    Roxbury Runway              42   17.8   N    74   32.9   W     141        267
+*    Maben                       42   16.3   N    74   23.6   W     133        266
+*    Freehold                    42   21.8   N    74    3.9   W     116        269
+*    Sunside                     42   19.6   N    74    3.8   W     116        267
+*    In The Woods                42    1.0   N    74    3.0   W     119        257
+*    Greenville-Rainbow          42   25.2   N    74    0.4   W     113        269
+*    South Cairo                 42   19.8   N    73   57.6   W     111        267
+*    Catskill Valley             42   16.8   N    73   57.2   W     111        266
+*    Deer Run                    42   19.4   N    73   52.4   W     106        267
+*    Wayne Delp                  42   24.0   N    73   52.0   W     106        270
+*    Greig Farm                  42    1.5   N    73   51.4   W     109        256
+*    Green Acres NY              42    9.0   N    73   45.0   W     102        260
+*    Columbia County             42   17.5   N    73   42.6   W      98        265
+*    Klaverack                   42   15.7   N    73   41.8   W      98        264
+*    Silvernails                 42    0.1   N    73   40.3   W     100        254
+*    Kline Kill                  42   21.0   N    73   38.2   W      94        267     01/19 40T            New York
+*    B Flat Farm                 42    8.4   N    73   36.7   W      95        259
+32   Great Barrington            42   11.1   N    73   24.2   W      84        259     11/29 26A            New York
+*    North Canaan                42    2.7   N    73   20.3   W      83        252     03/21 31T            New York
+*    Cmelak                      42    4.8   N    73   18.4   W      81        253
+29   Pittsfield                  42   25.6   N    73   17.5   W      76        271     08/26 50A            New York
+*    Albert Farms                42   23.3   N    72   55.8   W      58        268     N/S 28A              New York
+*    Cannizzaro                  42    4.7   N    72   49.1   W      58        246
+*    Mundale                     42    7.3   N    72   48.8   W      56        248     03/21 16T            New York
+*    Barnes Muni                 42    9.5   N    72   42.9   W      51        249     02/20 90A            New York
+13   Northampton                 42   19.7   N    72   36.7   W      42        261     14/32 35A            New York
+*    Hadley                      42   23.6   N    72   33.0   W      39        267     12/30 16T            New York
+*    Westover ARB                42   11.8   N    72   31.8   W      41        247     05/23 116A           New York
+*    Valley Farms                42    0.8   N    72   28.4   W      45        231     18/36 25A            New York
+*    Norm’s                      42   15.7   N    72   24.5   W      33        250
+*    Ware                        42   17.0   N    72   12.9   W      24        245     03/21 20T            New York
+ 5   Tanner-Hiller               42   21.4   N    72    7.8   W      18        254     06/24 28A            New York
+*    B&b Farm                    42   20.8   N    72    6.2   W      17        251
+*    Quabog                      42   12.5   N    72    4.6   W      21        224
+*    Root                        42   29.8   N    72    3.8   W      15        290
+*    Ladybug                     42   28.2   N    72    3.8   W      14        282
+*    Hubbardston                 42   29.6   N    72    2.4   W      13        291
+ 6   Southbridge                 42    6.0   N    72    2.3   W      26        209     02/20 35A            New York
+*    Dresser Hill                42    6.1   N    71   58.1   W      24        202
+ 3   Spencer MA                  42   17.4   N    71   57.9   W      13        223     01/19 19S            New York
+*    Howard                      42   28.0   N    71   57.2   W       8.6      289
+*    Stiles Res                  42   12.3   N    71   57.1   W      17        208
+*    Alta Vista                  42   21.5   N    71   55.6   W       8.2      235
+*    Muschopauge                 42   23.2   N    71   55.2   W       7.0      247
+*    Lanes                       42   29.8   N    71   54.8   W       7.8      309
+*    Wachusett                   42   29.3   N    71   53.2   W       6.4      313
+*    Worcester Muni              42   16.0   N    71   52.5   W      12        201     11/29 70A            New York
+*    Mason MA                    42   24.7   N    71   50.8   W       2.9      249
+*    Marshall’s                  42   21.9   N    71   49.2   W       4.5      198     18/36 17T            New York
+ 1   Sterling                    42   25.6   N    71   47.6   W                                             New York
+*    Crystal                     42   27.8   N    71   46.5   W       2.8       21
+*    North Row                   42   28.8   N    71   46.3   W       3.9       17
+*    Boylston Dike               42   24.1   N    71   43.2   W       4.1      115
+*    Tufts Vet                   42   14.9   N    71   40.4   W      14        153
+*    Garabedian Unknown          42   16.8   N    71   32.7   W      16        129     11/29 14A            New York
+*    Minute Man Airport          42   27.7   N    71   31.1   W      14         80     03/21 27A            New York
+ 7   Hopedale                    42    6.3   N    71   30.6   W      27        147     18/36 32A            New York
+*    Crow Island                 42   25.0   N    71   29.7   W      15         92
+*    Norfolk                     42    7.5   N    71   22.2   W      30        134     18/36 27A            New York
+*    Hanscom                     42   28.2   N    71   17.3   W      26         83     05/23 51A            New York
+*    Wolomolopoag                42    6.0   N    71   12.5   W      37        127     10/28 16T            New York
+*    Norwood Memorial            42   11.4   N    71   10.4   W      36        117     10/28 40A            New York
+*    Logan Intrnl                42   21.9   N    71    0.3   W      40         96     09/27 70A            New York
+*    South Weymouth              42    8.9   N    70   56.4   W      48        113     08/26 60A            New York
+22   Cranland                    42    1.5   N    70   50.3   W      56        119     18/36 18G            New York
+*    Pheasant Field              42    4.5   N    70   48.9   W      56        116     N/S 20T              New York
+*    Sherman-Pvt                 42    4.4   N    70   47.9   W      56        115     N/S 15T              New York
+*    Marshfield                  42    5.9   N    70   40.3   W      62        111     06/24 30A            New York
+*    Sharon                      42   46.7   N    74   34.7   W     144        281
+*    Hiserts                     42   59.1   N    74   31.2   W     144        286
+*    Russell 1                   42   52.2   N    74   29.9   W     141        283
+*    Ranch                       42   49.6   N    74   24.2   W     136        283
+*    Valley View                 42   38.9   N    74   23.2   W     133        277
+*    Fulton County               42   59.9   N    74   19.8   W     135        288
+*    Hogan                       42   46.9   N    74   19.5   W     131        282
+*    Gar                         42   45.8   N    74   16.7   W     128        281
+*    Amsterdam                   42   57.8   N    74   15.2   W     130        287
+*    Wenskoski                   42   59.8   N    74   14.7   W     131        288
+*    Nettie’s Place              42   42.6   N    74   13.4   W     125        280
+*    Blue Heron                  42   41.8   N    74   12.0   W     124        280
+*    Six Ponds                   42   50.5   N    74   10.7   W     125        284
+*    Apex                        42   43.8   N    74    9.8   W     122        281
+*    Wandervogel                 42   43.1   N    74    9.8   W     122        280
+*    West Township               42   42.0   N    74    9.3   W     122        280
+*    Tamarack Acres              42   59.5   N    74    9.2   W     126        289
+*    Mariaville                  42   49.2   N    74    8.9   W     123        284
+*    Johnson NY                  42   59.5   N    74    8.2   W     125        289
+*    Duanesburg                  42   45.6   N    74    8.1   W     121        282
+*    Iwan                        42   57.8   N    74    7.5   W     124        288
+*    Westwind Farm               42   59.0   N    74    1.0   W     119        290
+*    Schenectady County          42   51.1   N    73   55.7   W     112        286
+*    Jerry Phibbs                42   45.5   N    73   55.5   W     111        283
+*    South Albany                42   33.6   N    73   50.0   W     104        276
+*    Albany                      42   45.0   N    73   48.1   W     105        283
+*    Round Lake                  42   55.9   N    73   46.2   W     106        290
+*    Alexander Farm              42   34.8   N    73   37.0   W      93        277     18/36 34G            New York
+*    Rensselaer County           42   41.5   N    73   34.8   W      93        282
+*    Sherwood Farm               42   53.6   N    73   30.5   W      93        291     07/25 20T            New York
+*    Moseleys                    42   54.3   N    73   25.7   W      89        292     18/36 20T            New York
+*    William H. Morse            42   53.5   N    73   14.8   W      80        294     13/31 37A            New York
+27   Harriman-and-West           42   41.8   N    73   10.0   W      72        285     11/29 43A            New York
+*    Drury                       42   38.5   N    72   59.8   W      63        284
+*    Mt Snow Deerfield           42   55.6   N    72   51.9   W      65        303     01/19 27A            New York
+*    Moore’s Field               42   55.5   N    72   31.8   W      51        313     03/21 18T            New York
+10   Turners Falls               42   35.5   N    72   31.4   W      39        287     16/34 30A            New York
+*    Blodgett Farm               42   45.5   N    72   28.8   W      42        304     02/20 18T            New York
+*    Northfield                  42   36.3   N    72   28.7   W      37        290
+*    Mormon                      42   34.4   N    72   27.4   W      35        287
+*    Pilgrim’s Home              42   59.4   N    72   24.1   W      50        322
+*    Bear Den Hill               42   59.5   N    72   18.6   W      47        326
+ 8   Orange                      42   34.2   N    72   17.3   W      27        292     01/19 50A            New York
+11   Dillant-Hopkins             42   54.1   N    72   16.2   W      41        324     02/20 62A            New York
+*    Pease                       42   33.6   N    72    6.5   W      19        300
+*    Monadnock                   42   51.7   N    72    6.5   W      34        332
+*    Patriot Farm                42   49.9   N    72    6.3   W      32        331
+*    Johnson MA                  42   33.6   N    72    3.3   W      16        305
+*    Woodbury Hill               42   50.8   N    72    2.4   W      32        337
+ 4   Gardner                     42   33.0   N    72    0.9   W      14        307     18/36 30A            New York
+ 9   Jaffrey                     42   48.3   N    72    0.2   W      28        338     16/34 30A            New York
+*    Powder Mill                 42   58.9   N    71   55.4   W      39        350
+*    Newton Dirt                 42   37.3   N    71   54.5   W      15        337
+*    Sunny                       42   36.8   N    71   51.5   W      13        346
+*    Mason                       42   43.6   N    71   46.9   W      21          2                          Owner Mike Farrey: 6032668860
+ 2   Fitchburg                   42   33.2   N    71   45.5   W       9.0       11     14/32 35A            New York
+*    Zim                         42   43.6   N    71   43.1   W      21         10     18/36 15T            New York
+*    Brookline                   42   44.5   N    71   42.4   W      22         11     01/19 20A            New York
+*    Milford NH                  42   50.6   N    71   40.8   W      29         11
+*    Huff Memorial               42   57.5   N    71   39.2   W      38         11     16/34 9T             New York
+*    Moore AAF                   42   34.2   N    71   36.2   W      14         44
+*    Pepperell                   42   41.7   N    71   33.0   W      22         34                          New York
+*    Boire Field                 42   46.9   N    71   30.8   W      28         30     14/32 55A            New York
+*    Manchester                  42   56.0   N    71   26.2   W      39         27     06/24 58A            New York
+*    Steck Farm                  42   44.8   N    71   22.1   W      31         44     05/23 15T            New York
+*    Cleary                      42   59.9   N    71   20.1   W      46         30
+*    New England                 42   45.5   N    71   14.6   W      36         51     E/W 20T              New York
+18   Heaton                      42   58.1   N    71   10.9   W      49         40     11/29 17T            New York
+15   Goddard                     42   48.6   N    71    8.3   W      43         51     16/34 21T            New York
+*    Lawrence Muni               42   43.0   N    71    7.4   W      40         59     05/23 50A            New York
+*    Haverhill-Riverside         42   46.2   N    71    2.0   W      45         58     06/24 16A            New York
+*    Winterwood                  42   58.7   N    71    0.6   W      55         46     10/28 16T            New York
+*    Meadowbrook                 42   51.6   N    70   59.7   W      50         53     12/30 20T            New York
+*    Cole Farm                   42   55.7   N    70   58.4   W      54         50
+*    Propwash                    42   55.0   N    70   56.1   W      55         52
+*    Stratham Field              42   59.8   N    70   55.6   W      59         48     10/28 14G            New York
+17   Beverly Muni                42   35.0   N    70   55.0   W      46         76     09/27 50A            New York
+*    Snow                        42   40.0   N    70   51.2   W      51         71     04/22 16T            New York
+20   Plum Island                 42   47.8   N    70   50.5   W      55         62     10/28 25A            New York
+*    Hampton Airfield            42   57.8   N    70   49.7   W      61         53     02/20 21T            New York
+*    Murphys Landing             43    2.2   N    74   11.1   W     128        290
+*    Pines                       43    6.2   N    74    9.3   W     129        292
+*    Hines                       43    2.0   N    74    9.1   W     127        290
+*    Lewis                       43    8.0   N    74    7.0   W     127        293
+*    Circle K Ranch              43    8.2   N    74    7.0   W     128        293
+*    Plateau Sky Ranch           43   13.5   N    74    6.9   W     130        296
+*    Galway                      43    0.6   N    74    5.5   W     123        290
+*    Saratoga County             43    3.0   N    73   51.7   W     113        293
+*    Russell 2                   43    8.3   N    73   39.2   W     106        298
+*    Heber                       43   11.0   N    73   38.0   W     107        300
+*    Floyd Bennett               43   20.5   N    73   36.6   W     112        305
+*    Garnseys                    43    4.1   N    73   35.0   W     101        297
+*    August                      43   12.6   N    73   34.9   W     106        301
+*    Papp                        43   15.1   N    73   33.8   W     106        303
+*    Harris                      43   24.6   N    73   32.0   W     111        308
+*    Mountain View NY 1          43   20.4   N    73   28.7   W     106        307
+*    Archdale Meadows            43    3.2   N    73   28.7   W      96        297
+*    Argyle                      43   15.3   N    73   28.2   W     102        305
+*    Tracy                       43    8.7   N    73   25.2   W      96        302
+*    Chapin                      43    3.2   N    73   21.8   W      91        299
+*    Granville                   43   25.4   N    73   16.1   W     102        313
+*    Hulett Landing              43   19.8   N    73   14.5   W      96        311
+*    Pawlett Mach                43   22.0   N    73    8.9   W      94        314
+*    Manchester Center           43    9.7   N    73    2.8   W      81        309
+*    Ardell Flying               43   16.7   N    72   54.6   W      82        317
+*    Okemo                       43   24.4   N    72   43.4   W      82        326
+*    Holloway                    43   18.0   N    72   42.8   W      76        323     N/S 11T              New York
+*    North Windham               43   13.3   N    72   42.8   W      72        320     09/27 23T            New York
+*    Smith                       43   22.1   N    72   40.5   W      79        326     02/20 16T            New York
+*    Onyon                       43    1.1   N    72   39.1   W      60        313     12/30 20T            New York
+*    Hartness Sta                43   20.5   N    72   31.2   W      73        330     05/23 55A            New York
+*    Santa’s                     43    0.2   N    72   28.6   W      53        319     17/35 20T            New York
+*    Ascutney                    43   26.7   N    72   27.1   W      78        335
+*    Drewsville                  43    7.6   N    72   24.2   W      57        328
+*    Morningside                 43   19.3   N    72   22.4   W      68        335     N/S T Hang Gliders
+26   Claremont                   43   22.2   N    72   22.1   W      71        336     05/23 20A            New York
+*    Surry Farm                  43    1.1   N    72   21.5   W      50        325
+25   Parlin Field                43   23.2   N    72   11.2   W      69        343     18/36 19T            New York
+*    Eagles Nest                 43   24.3   N    71   56.9   W      68        353     14/32 28A            New York
+*    Antrim                      43    0.9   N    71   55.9   W      41        350
+16   Hawthorne-Feather           43    3.8   N    71   54.3   W      44        353     02/20 33A            New York
+*    Kearsarge                   43   23.0   N    71   51.4   W      66        357
+*    Intervale                   43   10.5   N    71   47.3   W      52          0
+*    Tucker Farm                 43   28.6   N    71   44.9   W      73          2
+*    Gile Pond                   43   29.8   N    71   39.1   W      74          5
+*    Ward Field                  43   29.5   N    71   38.7   W      74          6     04/22 11A            New York
+*    Country Club                43    4.0   N    71   36.7   W      45         12     18/36 12T            New York
+*    Concord Muni                43   12.0   N    71   30.2   W      55         15     03/21 40A            New York
+*    Cooper Farm                 43   16.8   N    71   27.2   W      61         16     16/34 17T            New York
+*    Locke Lake                  43   23.2   N    71   14.0   W      72         23     15/33 25T            New York
+*    Northwood                   43   12.4   N    71   13.3   W      61         28
+*    Murphy-Sherwood Park        43   10.8   N    71    8.2   W      62         32
+*    Therriaults Landing         43   28.9   N    71    3.4   W      82         27
+*    Skydive Lebanon             43   22.5   N    70   55.8   W      79         33     17/35 30A            New York
+*    Skyhaven                    43   17.0   N    70   55.8   W      74         36     15/33 40A            New York
+*    Salmon Falls                43   17.7   N    70   54.0   W      75         37     14/32 20T            New York
+*    Perrotti Skyranch           43   20.4   N    70   51.3   W      79         37
+*    Pease International         43    4.7   N    70   49.4   W      67         47     16/34 113A           New York
+*    Cibor                       43    0.5   N    70   48.0   W      65         51     10/28 25A            New York
+*    Littlebrook                 43    8.6   N    70   46.3   W      72         46     12/30 25A            New York
+*    Sanford                     43   23.6   N    70   42.5   W      87         39     07/25 60A            New York
+*    Biddeford                   43   27.9   N    70   28.4   W      98         43
+*    Back Acres                  43   24.7   N    70   26.8   W      96         45
+*    Goosefair                   43   24.3   N    70   25.9   W      97         45
+*    Bennetts                    43   42.0   N    73   59.0   W     141        309
+*    Schroon Lake                43   51.8   N    73   44.4   W     140        316
+*    Ticonderoga                 43   52.6   N    73   24.8   W     129        321
+*    Manning                     43   58.9   N    73   23.1   W     134        324
+*    Torrey                      43   55.9   N    73   22.2   W     131        323
+*    Brisson                     43   52.1   N    73   19.1   W     126        323
+*    Melrose Springs             43   56.7   N    73   19.0   W     130        324
+*    Symon                       43   53.0   N    73   17.2   W     126        324
+*    Fair Haven M                43   36.9   N    73   16.5   W     111        318
+*    Mortimer Brown Landing      43   39.9   N    73   10.0   W     110        321
+*    Middlebury                  43   59.1   N    73    5.7   W     126        329
+*    Rutland                     43   31.8   N    72   57.0   W      96        323     01/19 50A            New York
+*    Killington                  43   36.3   N    72   49.2   W      97        328
+*    Brandon                     43   54.0   N    72   35.0   W     109        339     17/35 13T            New York
+*    Arrow Field                 43   30.3   N    72   34.8   W      84        332     W/E T                Arrow Field
+*    Lebanon Muni                43   37.6   N    72   18.4   W      87        343     07/25 55A            New York
+*    Post Mills                  43   53.1   N    72   15.1   W     103        347     04/22 29T            New York
+*    Wentworth                   43   52.4   N    71   54.3   W     100        357
+34   Plymouth NH                 43   46.7   N    71   45.2   W      93          1     12/30 24T            New Hampshire
+30   Newfound                    43   35.5   N    71   45.1   W      81          2     03/21 18A            New York
+*    Bradley                     43   58.2   N    71   40.8   W     107          3     02/20 17T            New York
+*    Ashland                     43   43.6   N    71   40.1   W      90          4
+*    Laconia Muni                43   34.4   N    71   25.1   W      81         13     08/26 53A            New York
+35   Moultonboro                 43   46.1   N    71   23.2   W      95         12     02/20 36A            New York
+*    Flying Hsky                 43   41.2   N    71   17.4   W      91         16     09/27 15A            New York
+*    Melvin Village              43   42.5   N    71   17.1   W      92         16     13/31 23T            New York
+*    Lakes Region                43   35.2   N    71   16.0   W      85         18     12/30 20A            New York
+*    Windsock Village            43   49.8   N    71   11.2   W     102         17     15/33 40T            New York
+*    Leavitt                     43   58.4   N    71   10.2   W     111         16     10/28 20G            New York
+*    Chickville                  43   44.0   N    71    9.1   W      96         20     01/19 20T            New York
+*    Mountain View NH            43   39.0   N    71    9.0   W      91         21     14/32 30T            New York
+*    White Mountain              43   49.2   N    71    8.0   W     102         19     17/35 68G            New York
+*    Buzzy’s                     43   36.5   N    70   58.1   W      92         27     09/27 17T            New York
+*    Eastern Slopes              43   59.4   N    70   56.8   W     116         21     14/32 37A            New York
+*    Nadeau’s                    43   32.2   N    70   55.8   W      88         29
+*    Dyer’s Landing              43   55.1   N    70   51.3   W     113         24
+*    Limington-Harmon            43   45.9   N    70   40.4   W     108         31     11/29 30A            New York
+*    Heacock                     43   40.6   N    70   37.0   W     105         34
+*    Twin Eagles                 43   58.0   N    70   36.1   W     122         29
+*    Greaton                     43   34.5   N    70   31.1   W     102         39
+*    Webster                     43   40.5   N    70   29.7   W     108         37
+*    Slip Knot Landing           43   49.3   N    70   26.6   W     118         35
+*    Moody                       43   40.6   N    70   25.4   W     111         38
+*    Bayley’s                    43   32.8   N    70   22.5   W     106         42
+*    Scottow Bog Flightpark      43   36.8   N    70   21.4   W     109         41
+*    Cliff Dow                   43   57.0   N    70   19.2   W     129         35
+*    Portland Jetport            43   38.7   N    70   18.5   W     113         41
+*    Eric’s                      43   45.2   N    70   15.6   W     120         40
+*    Eagle                       43   48.9   N    70   13.8   W     124         39
+*    Margerison                  43   57.2   N    70    8.5   W     134         38
+*    Farr                        43   46.7   N    70    0.8   W     130         43
+*    Brunswick Executive         43   53.5   N    69   56.3   W     138         42
+*    Merrymeeting                44    0.0   N    69   53.2   W     145         41
+*    Wiscasset                   43   57.7   N    69   42.8   W     149         44
+*    Adirondack                  44   23.1   N    74   12.4   W     182        319
+*    Lake Placid                 44   15.9   N    73   57.7   W     167        320
+*    Marcy                       44   13.2   N    73   47.3   W     159        322
+*    Catalano                    44   25.4   N    73   45.0   W     169        325
+*    Westport 1                  44    9.5   N    73   26.0   W     145        326
+*    Bonebender                  44   18.8   N    73   23.1   W     153        329
+*    Staton                      44    7.0   N    73   22.7   W     141        326
+*    Yankee Kingdom              44    6.3   N    73   22.7   W     141        326
+*    Ass-Pirin Acres             44    4.1   N    73   22.4   W     139        326
+*    Basin Harbor                44   11.8   N    73   21.0   W     145        328
+*    Spencer VT                  44    6.9   N    73   17.4   W     139        328
+*    E.A. Deeds Farm             44   17.5   N    73   17.0   W     149        330
+*    Shelburne Farms             44   24.1   N    73   16.0   W     155        332
+*    Bostwick Farm               44   22.2   N    73   15.0   W     153        332
+*    Shelburne                   44   21.6   N    73   13.6   W     152        332
+*    Fairholt                    44   27.7   N    73   11.8   W     157        334
+*    Axinn                       44    2.7   N    73   11.4   W     132        328
+*    Sky Acres VT                44   25.0   N    73   10.0   W     154        334
+*    Frogs End                   44   21.9   N    73    9.2   W     150        333
+*    Burlington Intl.            44   28.3   N    73    9.2   W     157        335
+*    Meadow                      44   26.8   N    72   54.9   W     151        338
+*    Ketcham Lndg                44    9.7   N    72   50.1   W     131        337
+*    Warren-Sugarbush            44    7.0   N    72   49.6   W     128        336
+*    Angus Airways               44   13.8   N    72   47.3   W     134        338
+*    Edward Knapp                44   12.2   N    72   33.9   W     129        343
+*    Carriers Skypark            44    6.7   N    72   26.6   W     121        345     01/19 15G            Montreal
+*    Neddo                       44   12.7   N    72   24.0   W     127        346
+*    Knox                        44    9.9   N    72   21.3   W     123        347
+*    Catamount                   44   23.4   N    72   21.0   W     139        349
+*    Hardwick Hayfield           44   29.5   N    72   20.3   W     145        349
+*    Lightning Bolt              44   24.1   N    72   15.8   W     138        350
+37   Dean Memorial               44    4.8   N    72    0.5   W     115        355     01/19 25A            Montreal
+*    Moosilauke                  44    1.4   N    71   49.8   W     110        359
+38   Franconia                   44   11.7   N    71   45.0   W     122          1     18/36 26T            Montreal
+*    Presby                      44   14.0   N    71   42.9   W     125          2
+*    Twin Mountain               44   15.8   N    71   32.8   W     128          5     09/27 26A            Montreal
+*    Mount Washington            44   22.1   N    71   32.7   W     135          5     10/28 35A            Montreal
+*    Durand                      44   22.4   N    71   16.1   W     137         11
+39   Gorham                      44   23.6   N    71   11.8   W     139         12     12/30 28T            Montreal
+*    North Conway 1              44    2.6   N    71    8.2   W     117         16
+*    North Conway 2              44    0.7   N    71    7.5   W     115         17
+*    Route 13                    44   15.1   N    71    0.7   W     132         17
+*    Tib                         44    6.3   N    70   57.4   W     123         20
+*    Blake                       44   24.6   N    70   54.3   W     144         18
+*    Bethel                      44   25.5   N    70   48.6   W     147         19
+*    Stratton                    44   29.1   N    70   45.6   W     151         20
+*    Rumford Point               44   29.9   N    70   40.6   W     154         21
+*    Maple Ridge                 44    5.0   N    70   37.6   W     129         27
+*    Oxford County               44    9.4   N    70   28.9   W     137         28
+*    Abbots                      44   21.2   N    70   23.7   W     151         27
+*    Auburn/Lewiston             44    2.9   N    70   17.0   W     135         34
+*    Twitchell                   44   11.3   N    70   14.0   W     145         32
+*    Bowman                      44   24.6   N    70    8.8   W     160         31
+*    Rocky Ridge                 44   14.1   N    70    8.0   W     150         33
+*    Cliffords                   44    4.1   N    70    3.9   W     143         37
+*    Wales                       44   10.5   N    70    1.1   W     150         36
+*    Malone-Dufort               44   51.2   N    74   19.7   W     210        324
+*    Adirondack Estates          44   36.5   N    73   51.5   W     183        326
+*    Northway                    44   40.0   N    73   34.0   W     178        331
+*    Vasile                      44   45.8   N    73   33.5   W     184        332
+*    Mountain View NY 2          44   40.1   N    73   32.8   W     178        331
+*    Plattsburgh                 44   39.0   N    73   28.1   W     175        332
+*    Secret Spot                 44   37.0   N    73   27.9   W     173        332
+*    Hawk’s Nest                 44   52.7   N    73   21.0   W     186        336
+*    Northern Lights             44   52.3   N    73   17.2   W     185        337
+*    Savage Island               44   42.2   N    73   14.8   W     173        336
+*    Shaw Meadow                 44   38.6   N    73   11.2   W     168        336
+*    Franklin                    44   56.4   N    73    5.8   W     186        340
+*    Davis                       44   31.0   N    72   58.8   W     156        338
+*    Mountain View Farm          44   30.9   N    72   38.5   W     150        344
+*    Morrisville                 44   32.1   N    72   36.8   W     151        345
+*    Two Tails                   44   30.8   N    72   36.4   W     150        344
+*    Perras Field                44   31.6   N    72   34.9   W     150        345
+*    Jay Peak                    44   55.5   N    72   31.6   W     176        348
+*    Taylor                      44   36.5   N    72   28.8   W     155        347
+*    Newport VT                  44   53.3   N    72   13.7   W     172        353
+*    Caledonia                   44   34.1   N    72    1.1   W     148        356     02/20 33A            Montreal
+*    West Burke                  44   36.8   N    71   58.9   W     151        357     01/19 10T            Montreal
+*    Boylan Airport              44   47.5   N    71   49.3   W     163        360     14/32 27T            Montreal
+40   Colebrook                   44   53.0   N    71   30.0   W     170          5     04/22 24T            Montreal
+*    Berlin Muni                 44   34.5   N    71   10.5   W     152         12     18/36 52A            Montreal
+*    Errol                       44   47.5   N    71    9.8   W     167         11     15/33 37G            Montreal
+*    Murch                       44   56.3   N    71    2.0   W     178         12
+*    Stephen A Bean              44   59.5   N    70   39.9   W     186         17
+*    Thomas                      44   39.6   N    70   35.3   W     166         21
+*    Zinck                       44   31.4   N    70   32.7   W     158         23
+*    Swans                       44   30.9   N    70   24.4   W     160         25
+*    Lindbergh                   44   48.9   N    70   20.7   W     180         23
+*    Hilltop                     44   31.0   N    70   13.3   W     165         28
+*    Greenwoods                  45    0.6   N    73   14.8   W     193        338
+*    Sugarloaf                   45    5.1   N    70   13.0   W     200         23
