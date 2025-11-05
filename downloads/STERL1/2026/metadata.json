@@ -1,0 +1,82 @@
+{
+  "airport_code": "STERL1",
+  "year": "2026",
+  "updated_at": "2025-10-29T23:04:01.257238",
+  "flights": [
+    {
+      "flight_id": "570597519",
+      "dsid": "10346539",
+      "date": "26.10.2025",
+      "pilot": "Tom Orsini",
+      "airport": "Airport STERL1",
+      "points": 136.91,
+      "filename": "2026_Tom_Orsini_570597519.igc",
+      "download_url": "https://www.onlinecontest.org/olc-3.0/gliding/download.html?flightId=570597519",
+      "downloaded_at": "2025-10-29T23:04:01.256102",
+      "download_status": "downloaded",
+      "distance": null,
+      "speed": null,
+      "aircraft": null
+    },
+    {
+      "flight_id": "-1319060953",
+      "dsid": "10341416",
+      "date": "04.10.2025",
+      "pilot": "Mauricio Poodts",
+      "airport": "Airport STERL1",
+      "points": 29.21,
+      "filename": "2026_Mauricio_Poodts_-1319060953.igc",
+      "download_url": "https://www.onlinecontest.org/olc-3.0/gliding/download.html?flightId=-1319060953",
+      "downloaded_at": "2025-10-29T23:03:55.441152",
+      "download_status": "downloaded",
+      "distance": null,
+      "speed": null,
+      "aircraft": null
+    },
+    {
+      "flight_id": "-1097125947",
+      "dsid": "10342276",
+      "date": "04.10.2025",
+      "pilot": "Thomas Van de Velde",
+      "airport": "Airport STERL1",
+      "points": 0.0,
+      "filename": "2026_Thomas_Van_de_Velde_-1097125947.igc",
+      "download_url": "https://www.onlinecontest.org/olc-3.0/gliding/download.html?flightId=-1097125947",
+      "downloaded_at": "2025-10-29T23:03:49.600727",
+      "download_status": "downloaded",
+      "distance": null,
+      "speed": null,
+      "aircraft": null
+    },
+    {
+      "flight_id": "-1840906495",
+      "dsid": "10339555",
+      "date": "28.09.2025",
+      "pilot": "Mauricio Poodts",
+      "airport": "Airport STERL1",
+      "points": 40.99,
+      "filename": "2026_Mauricio_Poodts_-1840906495.igc",
+      "download_url": "https://www.onlinecontest.org/olc-3.0/gliding/download.html?flightId=-1840906495",
+      "downloaded_at": "2025-10-29T23:03:45.580009",
+      "download_status": "downloaded",
+      "distance": null,
+      "speed": null,
+      "aircraft": null
+    },
+    {
+      "flight_id": "-1840955171",
+      "dsid": "10339550",
+      "date": "28.09.2025",
+      "pilot": "Mauricio Poodts",
+      "airport": "Airport STERL1",
+      "points": 23.75,
+      "filename": "2026_Mauricio_Poodts_-1840955171.igc",
+      "download_url": "https://www.onlinecontest.org/olc-3.0/gliding/download.html?flightId=-1840955171",
+      "downloaded_at": "2025-10-29T23:03:40.381284",
+      "download_status": "downloaded",
+      "distance": null,
+      "speed": null,
+      "aircraft": null
+    }
+  ]
+}
