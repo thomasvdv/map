@@ -12,11 +12,6 @@ on:
         description: 'Airport code to update (e.g., STERL1)'
         required: false
         default: 'STERL1'
-      skip_satellite_tiles:
-        description: 'Skip satellite tile generation'
-        required: false
-        type: boolean
-        default: false
 
 jobs:
   update-flights:
@@ -82,12 +77,10 @@ jobs:
       - name: Check for new flights and update
         env:
           AIRPORT_CODE: ${{ github.event.inputs.airport_code || 'STERL1' }}
-          SKIP_SAT_TILES: ${{ github.event.inputs.skip_satellite_tiles || 'false' }}
         run: |
           echo "Running daily update for airport: $AIRPORT_CODE"
-          python scripts/daily_update.py \
-            --airport-code $AIRPORT_CODE \
-            $([ "$SKIP_SAT_TILES" = "true" ] && echo "--skip-satellite-tiles")
+          echo "Satellite imagery served directly from NASA GIBS"
+          python scripts/daily_update.py --airport-code $AIRPORT_CODE
 
       - name: Upload changes to R2
         env:

@@ -1,7 +1,8 @@
 """
 Cloudflare R2 Uploader
 
-Handles uploading VFR tiles, satellite tiles, and maps to Cloudflare R2 storage.
+Handles uploading VFR tiles and maps to Cloudflare R2 storage.
+Satellite imagery is served directly from NASA GIBS (no upload needed).
 Uses boto3 (S3-compatible API) for uploads.
 """
 
@@ -295,63 +296,6 @@ class R2Uploader:
             show_progress=show_progress,
             skip_if_exists=skip_if_exists
         )
-
-    def upload_satellite_tiles(
-        self,
-        daily_sat_tiles_dir: Path,
-        dates: Optional[List[str]] = None,
-        show_progress: bool = True,
-        skip_if_exists: bool = True
-    ) -> Tuple[int, int, int]:
-        """
-        Upload daily satellite tiles to R2.
-
-        Args:
-            daily_sat_tiles_dir: Path to daily_sat_tiles directory
-            dates: Optional list of specific dates to upload (YYYY-MM-DD format)
-            show_progress: Show progress bar
-            skip_if_exists: If True, skip files that already exist with same content (default: True)
-
-        Returns:
-            Tuple of (uploaded_count, skipped_count, total_count)
-        """
-        if not daily_sat_tiles_dir.exists():
-            raise ValueError(f"Satellite tiles directory not found: {daily_sat_tiles_dir}")
-
-        total_uploaded = 0
-        total_skipped = 0
-        total_count = 0
-
-        # Get all date directories
-        if dates:
-            date_dirs = [daily_sat_tiles_dir / date for date in dates if (daily_sat_tiles_dir / date).exists()]
-        else:
-            date_dirs = [d for d in daily_sat_tiles_dir.iterdir() if d.is_dir()]
-
-        if not date_dirs:
-            logger.warning(f"No date directories found in {daily_sat_tiles_dir}")
-            return 0, 0, 0
-
-        logger.info(f"Processing satellite tiles for {len(date_dirs)} dates")
-
-        for date_dir in date_dirs:
-            date = date_dir.name
-            uploaded, skipped, count = self.upload_directory(
-                date_dir,
-                f"daily_sat_tiles/{date}/",
-                pattern="**/*.jpg",
-                content_type="image/jpeg",
-                show_progress=show_progress,
-                skip_if_exists=skip_if_exists
-            )
-            total_uploaded += uploaded
-            total_skipped += skipped
-            total_count += count
-
-        logger.info(
-            f"Satellite tiles upload complete: {total_uploaded} uploaded, {total_skipped} skipped, {total_count} total"
-        )
-        return total_uploaded, total_skipped, total_count
 
     def upload_map(
         self,

@@ -265,7 +265,6 @@ def download(year: str, output: str, force: bool, dry_run: bool, retries: int, a
                         map_file = generator.generate_airport_map(
                             airport_code=airport_code,
                             deployment_mode='local',
-                            skip_satellite_tiles=False,
                         )
                         console.print(f"[green]✓[/] Map generated: {map_file.absolute()}")
                         console.print(f"[cyan]Open in browser:[/] file://{map_file.absolute()}")
@@ -403,10 +402,9 @@ def list_flights(year: str, airport: str, airport_code: str, all_pilots: bool, m
 @click.option('--force', '-f', is_flag=True, help='Re-download existing files')
 @click.option('--max-tracks', '-m', type=int, help='Maximum number of tracks to display (default: all)')
 @click.option('--deployment-mode', '-d', type=click.Choice(['local', 'static']), default='static', help='Deployment mode: local (absolute paths) or static (relative paths for R2/CDN)')
-@click.option('--skip-satellite-tiles', is_flag=True, help='Skip automatic satellite tile generation (faster, but no date-specific satellite imagery)')
 @click.option('--no-upload', is_flag=True, help='Skip automatic upload to Cloudflare R2')
 @click.option('--verbose', '-v', is_flag=True, help='Verbose output')
-def map(airport_code: str, output: str, min_points: float, year: str, skip_download: bool, force: bool, max_tracks: int, deployment_mode: str, skip_satellite_tiles: bool, no_upload: bool, verbose: bool):
+def map(airport_code: str, output: str, min_points: float, year: str, skip_download: bool, force: bool, max_tracks: int, deployment_mode: str, no_upload: bool, verbose: bool):
     """Download flights and generate interactive map for an airport (downloads all pilots by default)"""
     setup_logging(verbose)
 
@@ -469,8 +467,7 @@ def map(airport_code: str, output: str, min_points: float, year: str, skip_downl
         console.print(f"\n[cyan]Generating map for airport {airport_code}...[/]")
         if deployment_mode == 'static':
             console.print(f"[cyan]Using static mode (relative URLs for R2)[/]")
-        if skip_satellite_tiles:
-            console.print(f"[yellow]Skipping satellite tile generation[/]")
+        console.print(f"[cyan]Satellite imagery will be served directly from NASA GIBS[/]")
         if not no_upload:
             console.print(f"[cyan]Will upload to R2 after generation[/]")
 
@@ -480,7 +477,6 @@ def map(airport_code: str, output: str, min_points: float, year: str, skip_downl
             airport_code=airport_code,
             max_tracks=max_tracks,
             deployment_mode=deployment_mode,
-            skip_satellite_tiles=skip_satellite_tiles,
         )
 
         console.print(f"\n[green]✓[/] Map generated: {map_file.absolute()}")
@@ -495,15 +491,7 @@ def map(airport_code: str, output: str, min_points: float, year: str, skip_downl
                 console.print(f"\n[cyan]Uploading to R2...[/]")
                 uploader = R2Uploader()
 
-                # Upload satellite tiles first
-                sat_tiles_dir = PathlibPath('daily_sat_tiles')
-                if sat_tiles_dir.exists() and not skip_satellite_tiles:
-                    console.print(f"[cyan]Uploading satellite tiles...[/]")
-                    uploaded, skipped, total = uploader.upload_satellite_tiles(sat_tiles_dir)
-                    if uploaded > 0 or skipped > 0:
-                        console.print(f"[green]✓[/] Satellite tiles: {uploaded} uploaded, {skipped} skipped, {total} total")
-                    else:
-                        console.print(f"[yellow]⚠[/] No satellite tiles uploaded")
+                # Satellite imagery served directly from NASA GIBS (no upload needed)
 
                 # Upload map
                 console.print(f"[cyan]Uploading map...[/]")
@@ -545,171 +533,6 @@ def map(airport_code: str, output: str, min_points: float, year: str, skip_downl
             console.print(traceback.format_exc())
         raise click.Abort()
 
-
-@cli.command()
-@click.option('--airport-code', '-a', help='Airport code to generate tiles for (e.g., STERL1)')
-@click.option('--downloads-dir', '-d', type=click.Path(), default='downloads', help='Directory containing flight downloads (default: ./downloads)')
-@click.option('--output-dir', '-o', type=click.Path(), default='daily_sat_tiles', help='Output directory for satellite tiles (default: ./daily_sat_tiles)')
-@click.option('--dates', multiple=True, help='Specific dates to generate (YYYY-MM-DD format, can specify multiple times)')
-@click.option('--all-dates', is_flag=True, help='Generate tiles for all flight dates')
-@click.option('--zoom-start', type=int, default=8, help='Start zoom level (default: 8)')
-@click.option('--zoom-end', type=int, default=9, help='End zoom level (default: 9, NASA VIIRS native max)')
-@click.option('--force-regenerate', is_flag=True, help='Regenerate existing tiles')
-@click.option('--verbose', '-v', is_flag=True, help='Verbose output')
-def generate_satellite_tiles(
-    airport_code: str,
-    downloads_dir: str,
-    output_dir: str,
-    dates: tuple,
-    all_dates: bool,
-    zoom_start: int,
-    zoom_end: int,
-    force_regenerate: bool,
-    verbose: bool
-):
-    """Generate date-specific satellite tiles from NASA GIBS VIIRS imagery
-
-    Downloads historical satellite imagery tiles for dates when flights were recorded,
-    allowing pilots to review actual cloud and weather conditions from their flight days.
-
-    Examples:
-        # Generate tiles for all flight dates at Sterling airport
-        olc-download generate-satellite-tiles --airport-code STERL1 --all-dates
-
-        # Generate tiles for specific dates
-        olc-download generate-satellite-tiles --dates 2024-07-27 --dates 2024-08-15
-
-        # Generate with higher zoom levels (more storage required)
-        olc-download generate-satellite-tiles --airport-code STERL1 --all-dates --zoom-end 10
-    """
-    setup_logging(verbose)
-
-    try:
-        from pathlib import Path
-        import sys
-
-        # Import the satellite tile manager
-        from .satellite_tile_generator import SatelliteTileManager
-
-        # Validate inputs
-        if not dates and not all_dates:
-            console.print("[red]Error:[/] Must specify either --dates or --all-dates")
-            raise click.Abort()
-
-        if not all_dates and not dates:
-            console.print("[red]Error:[/] No dates specified")
-            raise click.Abort()
-
-        downloads_path = Path(downloads_dir)
-        output_path = Path(output_dir)
-
-        if not downloads_path.exists():
-            console.print(f"[red]Error:[/] Downloads directory not found: {downloads_path}")
-            raise click.Abort()
-
-        # Initialize manager
-        tile_manager = SatelliteTileManager(output_path)
-
-        # Get dates to process
-        if dates:
-            dates_to_process = set(dates)
-            console.print(f"[cyan]Processing {len(dates_to_process)} specified dates[/]")
-        else:  # all_dates
-            console.print(f"[cyan]Extracting flight dates from metadata...[/]")
-            all_flight_dates = tile_manager.get_unique_flight_dates(downloads_path, airport_code)
-
-            if not all_flight_dates:
-                console.print(f"[yellow]No flight dates found in {downloads_path}[/]")
-                if airport_code:
-                    console.print(f"[yellow]Hint: Make sure flights for airport '{airport_code}' have been downloaded[/]")
-                raise click.Abort()
-
-            # Filter to VIIRS-available dates
-            viirs_dates, pre_viirs_dates = tile_manager.filter_viirs_dates(all_flight_dates)
-
-            if pre_viirs_dates:
-                console.print(f"[yellow]Note: Skipping {len(pre_viirs_dates)} flights before 2012-01-19 (VIIRS availability)[/]")
-                if verbose:
-                    console.print(f"[yellow]Pre-VIIRS dates: {sorted(pre_viirs_dates)}[/]")
-
-            if not viirs_dates:
-                console.print(f"[yellow]No dates in VIIRS range (2012-01-19 onwards)[/]")
-                raise click.Abort()
-
-            dates_to_process = viirs_dates
-            console.print(f"[cyan]Found {len(dates_to_process)} unique flight dates with VIIRS coverage[/]")
-
-        # Check which dates already have tiles
-        if not force_regenerate:
-            existing_dates = tile_manager.get_generated_dates()
-            new_dates = dates_to_process - existing_dates
-            skipped_count = len(dates_to_process) - len(new_dates)
-
-            if skipped_count > 0:
-                console.print(f"[yellow]Skipping {skipped_count} dates with existing tiles (use --force-regenerate to regenerate)[/]")
-
-            dates_to_process = new_dates
-
-        if not dates_to_process:
-            console.print(f"[green]All tiles already exist![/]")
-            return
-
-        console.print(f"[cyan]Will generate tiles for {len(dates_to_process)} dates: {sorted(dates_to_process)}[/]")
-        console.print(f"[cyan]Zoom levels: {zoom_start} to {zoom_end}[/]")
-        console.print(f"[yellow]Note: VIIRS native resolution is z0-9. Higher zooms use client-side upscaling.[/]")
-
-        # Import and run the tile fetching logic
-        # We'll call the script as a subprocess for now
-        import subprocess
-
-        script_path = Path(__file__).parent.parent.parent / 'tile_generator' / 'scripts' / 'fetch_nasa_tiles.py'
-
-        if not script_path.exists():
-            console.print(f"[red]Error:[/] Tile fetcher script not found: {script_path}")
-            raise click.Abort()
-
-        # Build command
-        cmd = [
-            sys.executable,
-            str(script_path),
-            '--downloads-dir', str(downloads_path),
-            '--output-dir', str(output_path),
-            '--zoom-start', str(zoom_start),
-            '--zoom-end', str(zoom_end),
-        ]
-
-        if airport_code:
-            cmd.extend(['--airport-code', airport_code])
-
-        if dates:
-            cmd.append('--dates')
-            cmd.extend(dates)
-        else:
-            cmd.append('--all-dates')
-
-        if force_regenerate:
-            cmd.append('--force-regenerate')
-
-        # Run the script
-        console.print(f"\n[cyan]Starting tile generation...[/]")
-        result = subprocess.run(cmd, capture_output=False)
-
-        if result.returncode == 0:
-            console.print(f"\n[green]✓[/] Satellite tiles generated successfully!")
-            console.print(f"[cyan]Tiles saved to:[/] {output_path}")
-            console.print(f"\n[cyan]Next steps:[/]")
-            console.print(f"  1. Generate map with: olc-download map --airport-code {airport_code or 'YOUR_CODE'}")
-            console.print(f"  2. Select 'Satellite (Flight Date)' layer in the map to view historical imagery")
-        else:
-            console.print(f"\n[red]✗[/] Tile generation failed with exit code {result.returncode}")
-            raise click.Abort()
-
-    except Exception as e:
-        console.print(f"[red]Error:[/] {e}", style="bold red")
-        if verbose:
-            import traceback
-            console.print(traceback.format_exc())
-        raise click.Abort()
 
 
 @cli.command()
@@ -1196,15 +1019,15 @@ def update_metadata_stats(airport_code: str, output_dir: str, verbose: bool):
 
 @cli.command()
 @click.option('--vfr-tiles', is_flag=True, help='Upload VFR sectional tiles')
-@click.option('--satellite-tiles', is_flag=True, help='Upload satellite tiles')
 @click.option('--map', '-m', 'map_file', type=click.Path(exists=True), help='Upload specific map file')
-@click.option('--all', '-a', 'upload_all', is_flag=True, help='Upload all content (VFR tiles, satellite tiles, maps)')
+@click.option('--all', '-a', 'upload_all', is_flag=True, help='Upload all content (VFR tiles and maps)')
 @click.option('--bucket', default='map', help='R2 bucket name (default: map)')
 @click.option('--verbose', '-v', is_flag=True, help='Verbose output')
-def upload_to_r2(vfr_tiles: bool, satellite_tiles: bool, map_file: str, upload_all: bool, bucket: str, verbose: bool):
+def upload_to_r2(vfr_tiles: bool, map_file: str, upload_all: bool, bucket: str, verbose: bool):
     """Upload content to Cloudflare R2 storage
 
-    This command uploads VFR tiles, satellite tiles, and/or maps to Cloudflare R2.
+    This command uploads VFR tiles and/or maps to Cloudflare R2.
+    Satellite imagery is served directly from NASA GIBS (no upload needed).
 
     Required environment variables:
       - R2_ACCOUNT_ID: Your Cloudflare account ID
@@ -1214,9 +1037,6 @@ def upload_to_r2(vfr_tiles: bool, satellite_tiles: bool, map_file: str, upload_a
     Examples:
         # Upload VFR tiles only
         olc-download upload-to-r2 --vfr-tiles
-
-        # Upload satellite tiles only
-        olc-download upload-to-r2 --satellite-tiles
 
         # Upload a specific map
         olc-download upload-to-r2 --map downloads/STERL1_map.html
@@ -1231,9 +1051,9 @@ def upload_to_r2(vfr_tiles: bool, satellite_tiles: bool, map_file: str, upload_a
         from .r2_uploader import R2Uploader
 
         # Check if at least one upload type is specified
-        if not (vfr_tiles or satellite_tiles or map_file or upload_all):
+        if not (vfr_tiles or map_file or upload_all):
             console.print("[red]Error:[/] Must specify at least one upload type")
-            console.print("[cyan]Use --vfr-tiles, --satellite-tiles, --map, or --all[/]")
+            console.print("[cyan]Use --vfr-tiles, --map, or --all[/]")
             raise click.Abort()
 
         # Initialize uploader
@@ -1260,15 +1080,7 @@ def upload_to_r2(vfr_tiles: bool, satellite_tiles: bool, map_file: str, upload_a
             else:
                 console.print(f"[yellow]Warning:[/] VFR tiles directory not found: {vfr_tiles_dir}")
 
-        # Upload satellite tiles
-        if upload_all or satellite_tiles:
-            sat_tiles_dir = Path('daily_sat_tiles')
-            if sat_tiles_dir.exists():
-                console.print("\n[cyan]Uploading satellite tiles...[/]")
-                uploaded, skipped, total = uploader.upload_satellite_tiles(sat_tiles_dir)
-                console.print(f"[green]✓[/] Satellite tiles: {uploaded} uploaded, {skipped} skipped, {total} total")
-            else:
-                console.print(f"[yellow]Warning:[/] Satellite tiles directory not found: {sat_tiles_dir}")
+        # Satellite imagery served directly from NASA GIBS (no upload needed)
 
         # Upload specific map
         if map_file:

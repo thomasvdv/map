@@ -1,121 +1,14 @@
 #!/usr/bin/env python3
 """
-State Management for OLC Flight Processing
-
-Tracks which flights and dates have been processed to avoid redundant work.
-State is stored in a JSON file and synced to R2 between runs.
-"""
-
-import json
-import logging
-from pathlib import Path
-from datetime import datetime
-from typing import Set, Dict, Optional, List
-
-logger = logging.getLogger(__name__)
-
-
-class ProcessingState:
-    """Manages state of processed flights and dates"""
-
-    def __init__(self, airport_code: str, state_file: Path = None):
-        """
-        Initialize state manager.
-
-        Args:
-            airport_code: Airport code (e.g., STERL1)
-            state_file: Path to state file (defaults to downloads/{airport_code}_state.json)
-        """
-        self.airport_code = airport_code
-
-        if state_file is None:
-            self.state_file = Path('downloads') / f'{airport_code}_state.json'
-        else:
-            self.state_file = Path(state_file)
-
-        self.state = self._load_state()
-
-    def _load_state(self) -> dict:
-        """
-        Load state from file.
-
-        Returns:
-            State dictionary
-        """
-        if not self.state_file.exists():
-            logger.info(f"No existing state file found at {self.state_file}, starting fresh")
-            return self._create_empty_state()
-
-        try:
-            with open(self.state_file, 'r') as f:
-                state = json.load(f)
-                logger.info(f"Loaded state from {self.state_file}")
-                return state
-        except Exception as e:
-            logger.error(f"Failed to load state file: {e}")
-            logger.warning("Starting with fresh state")
-            return self._create_empty_state()
-
-    def _create_empty_state(self) -> dict:
-        """Create empty state structure"""
-        return {
-            "airport_code": self.airport_code,
-            "last_updated": None,
-            "processed_dates": {},
-            "processed_flights": {},
-            "metadata": {
-                "created_at": datetime.utcnow().isoformat() + 'Z',
-                "version": "1.0"
-            }
-        }
-
-    def save(self) -> bool:
-        """
-        Save state to file.
-
-        Returns:
-            True if successful
-        """
-        try:
-            self.state_file.parent.mkdir(parents=True, exist_ok=True)
-
-            # Update last_updated timestamp
-            self.state['last_updated'] = datetime.utcnow().isoformat() + 'Z'
-
-            with open(self.state_file, 'w') as f:
-                json.dump(self.state, f, indent=2)
-
-            logger.info(f"Saved state to {self.state_file}")
-            return True
-
-        except Exception as e:
-            logger.error(f"Failed to save state: {e}")
-            return False
-
-    def is_flight_processed(self, flight_filename: str) -> bool:
-        """
-        Check if a flight has been processed.
-
-        Args:
-            flight_filename: IGC filename (e.g., 2025_Pilot_Name_123.igc)
-
-        Returns:
-            True if flight has been processed
-        """
-        return flight_filename in self.state['processed_flights']
-
-    def is_date_processed(self, date_str: str) -> bool:
-        """
-        Check if a date has been fully processed (including satellite tiles).
+        Check if a date has been processed.
 
         Args:
             date_str: Date in YYYY-MM-DD format
 
         Returns:
-            True if date has been processed with satellite tiles
+            True if date has flights recorded
         """
-        date_state = self.state['processed_dates'].get(date_str, {})
-        return date_state.get('satellite_tiles_generated', False)
+        return date_str in self.state['processed_dates']
 
     def get_new_flights(self, all_flights: List[str]) -> List[str]:
         """
@@ -165,7 +58,7 @@ class ProcessingState:
         if date_str not in self.state['processed_dates']:
             self.state['processed_dates'][date_str] = {
                 'flights': [],
-                'satellite_tiles_generated': False,
+                
                 'last_processed': None
             }
 
@@ -176,25 +69,20 @@ class ProcessingState:
 
     def mark_date_processed(
         self,
-        date_str: str,
-        satellite_tiles_generated: bool = True
+        date_str: str
     ) -> None:
         """
-        Mark a date as fully processed.
+        Mark a date as having flights processed.
 
         Args:
             date_str: Date in YYYY-MM-DD format
-            satellite_tiles_generated: Whether satellite tiles were generated
         """
         if date_str not in self.state['processed_dates']:
             self.state['processed_dates'][date_str] = {
                 'flights': [],
-                'satellite_tiles_generated': False,
+                
                 'last_processed': None
-            }
-
-        self.state['processed_dates'][date_str]['satellite_tiles_generated'] = satellite_tiles_generated
-        self.state['processed_dates'][date_str]['last_processed'] = datetime.utcnow().isoformat() + 'Z'
+            }        self.state['processed_dates'][date_str]['last_processed'] = datetime.utcnow().isoformat() + 'Z'
 
         logger.debug(f"Marked date as processed: {date_str}")
 
@@ -204,8 +92,7 @@ class ProcessingState:
 
     def get_processed_date_count(self) -> int:
         """Get total number of processed dates"""
-        return len([d for d in self.state['processed_dates'].values()
-                    if d.get('satellite_tiles_generated', False)])
+        return len(self.state['processed_dates'])
 
     def get_summary(self) -> str:
         """
@@ -216,14 +103,11 @@ class ProcessingState:
         """
         total_flights = len(self.state['processed_flights'])
         total_dates = len(self.state['processed_dates'])
-        dates_with_tiles = len([d for d in self.state['processed_dates'].values()
-                                if d.get('satellite_tiles_generated', False)])
+        dates_with_tiles = len(self.state['processed_dates'])
 
         summary = f"Processing State for {self.airport_code}\n"
         summary += f"  Total flights processed: {total_flights}\n"
         summary += f"  Total dates tracked: {total_dates}\n"
-        summary += f"  Dates with satellite tiles: {dates_with_tiles}\n"
-
         if self.state['last_updated']:
             summary += f"  Last updated: {self.state['last_updated']}\n"
 
@@ -272,7 +156,7 @@ def main():
             sorted_dates = sorted(state.state['processed_dates'].keys(), reverse=True)
             for date_str in sorted_dates[:10]:
                 date_state = state.state['processed_dates'][date_str]
-                tiles = "✓" if date_state.get('satellite_tiles_generated') else "✗"
+                tiles = "N/A"  # Satellite tiles removed (served from NASA GIBS)
                 flight_count = len(date_state.get('flights', []))
                 print(f"  {date_str}: {flight_count} flights, tiles: {tiles}")
 

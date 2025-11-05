@@ -2654,112 +2654,12 @@ class MapGenerator:
 
         flight_map.get_root().html.add_child(folium.Element(filter_html))
 
-    def _auto_generate_satellite_tiles(self, tracks: List[FlightTrack], airport_code: str):
-        """
-        Automatically generate satellite tiles for flight dates that don't have them yet.
-
-        Args:
-            tracks: List of flight tracks
-            airport_code: Airport code for the flights
-        """
-        try:
-            # Import here to avoid circular dependency
-            from .satellite_tile_generator import SatelliteTileManager
-
-            # Initialize tile manager (uses daily_sat_tiles directory in project root)
-            sat_tiles_dir = Path(__file__).parent.parent.parent / 'daily_sat_tiles'
-            tile_manager = SatelliteTileManager(sat_tiles_dir)
-
-            # Extract unique flight dates from tracks
-            flight_dates = set()
-            for track in tracks:
-                if track.flight_date and track.flight_date != 'unknown':
-                    flight_dates.add(track.flight_date)
-
-            if not flight_dates:
-                logger.info("No valid flight dates found, skipping satellite tile generation")
-                return
-
-            # Filter to VIIRS-available dates (2012+)
-            viirs_dates, pre_viirs_dates = tile_manager.filter_viirs_dates(flight_dates)
-
-            if pre_viirs_dates:
-                logger.info(f"Skipping {len(pre_viirs_dates)} pre-VIIRS dates (before 2012-01-19): {sorted(pre_viirs_dates)}")
-
-            if not viirs_dates:
-                logger.info("No dates in VIIRS range (2012+), skipping satellite tile generation")
-                return
-
-            # Check which dates already have tiles
-            existing_dates = tile_manager.get_generated_dates()
-            missing_dates = viirs_dates - existing_dates
-
-            if not missing_dates:
-                logger.info(f"All {len(viirs_dates)} flight dates already have satellite tiles")
-                return
-
-            logger.info(f"Found {len(missing_dates)} flight dates without satellite tiles")
-            logger.info(f"Dates: {', '.join(sorted(missing_dates)[:5])}{'...' if len(missing_dates) > 5 else ''}")
-            logger.info(f"")
-            logger.info(f"Downloading NASA satellite tiles for {len(missing_dates)} dates...")
-            logger.info(f"This may take 5-10 minutes per date (~10,000 tiles each)")
-            logger.info(f"Estimated time: {len(missing_dates) * 5}-{len(missing_dates) * 10} minutes")
-            logger.info(f"")
-            logger.info(f"Progress will be shown below:")
-            logger.info(f"━" * 60)
-
-            # Call the satellite tile generator script
-            script_path = Path(__file__).parent.parent.parent / 'tile_generator' / 'scripts' / 'fetch_nasa_tiles.py'
-
-            if not script_path.exists():
-                logger.warning(f"Satellite tile generator script not found at {script_path}")
-                logger.warning("Skipping automatic satellite tile generation")
-                logger.warning("To generate tiles manually, run:")
-                logger.warning(f"  olc-download generate-satellite-tiles --airport-code {airport_code} --all-dates")
-                return
-
-            # Build command
-            cmd = [
-                sys.executable,
-                str(script_path),
-                '--downloads-dir', str(self.output_dir),
-                '--output-dir', str(sat_tiles_dir),
-                '--zoom-start', '8',
-                '--zoom-end', '9',
-                '--dates'
-            ]
-            cmd.extend(sorted(missing_dates))
-
-            if airport_code:
-                cmd.extend(['--airport-code', airport_code])
-
-            # Run the tile generator with real-time output
-            result = subprocess.run(cmd)
-
-            if result.returncode == 0:
-                logger.info(f"━" * 60)
-                logger.info(f"✓ Successfully generated satellite tiles for {len(missing_dates)} dates")
-            else:
-                logger.warning(f"━" * 60)
-                logger.warning(f"Satellite tile generation failed (exit code {result.returncode})")
-                logger.warning("Map will still be generated, but satellite imagery may not be available")
-                logger.warning("To retry manually, run:")
-                logger.warning(f"  olc-download generate-satellite-tiles --airport-code {airport_code} --all-dates")
-
-        except ImportError as e:
-            logger.warning(f"Could not import satellite tile manager: {e}")
-            logger.warning("Skipping automatic satellite tile generation")
-        except Exception as e:
-            logger.warning(f"Error during automatic satellite tile generation: {e}")
-            logger.warning("Map will still be generated, but satellite imagery may not be available")
-
     def create_map(
         self,
         airport_code: str,
         tracks: List[FlightTrack],
         output_file: Optional[Path] = None,
         deployment_mode: str = 'local',
-        skip_satellite_tiles: bool = False,
     ) -> Path:
         """
         Create an interactive map with all flight tracks
@@ -4666,11 +4566,8 @@ class MapGenerator:
         # Add measure control
         plugins.MeasureControl().add_to(flight_map)
 
-        # Auto-generate satellite tiles for dates that don't have them yet
-        if not skip_satellite_tiles:
-            self._auto_generate_satellite_tiles(tracks, airport_code)
-        else:
-            logger.info("Skipping satellite tile generation (--skip-satellite-tiles flag set)")
+        # Satellite tiles served directly from NASA GIBS (no download needed)
+        logger.info("Satellite imagery will be served directly from NASA GIBS")
 
         # Export flight data to separate JSON files before saving map
         if output_file is None:
@@ -4702,14 +4599,16 @@ class MapGenerator:
         if deployment_mode in ['static', 'github-pages']:
             # Use relative path for R2/CDN deployment
             vfr_tile_url = 'vfr_tiles/tiles/{z}/{x}/{y}.png'
-            satellite_tile_url = f'daily_sat_tiles/{default_satellite_date}/{{z}}/{{x}}/{{y}}.jpg'
         else:
             # Use relative path for local development
             # To test locally, run a web server in the project root:
             #   cd /Users/thomasvdv/GitHub/olc-weglide && python3 -m http.server 8000
             # Then open: http://localhost:8000/downloads/STERL1_map.html
             vfr_tile_url = '../vfr_tiles/tiles/{z}/{x}/{y}.png'
-            satellite_tile_url = f'../daily_sat_tiles/{default_satellite_date}/{{z}}/{{x}}/{{y}}.jpg'
+
+        # Use NASA GIBS for satellite imagery (served directly, no download needed)
+        # VIIRS is primary source (2012+), MODIS Terra is fallback (2000+)
+        satellite_tile_url = f'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_SNPP_CorrectedReflectance_TrueColor/default/{default_satellite_date}/GoogleMapsCompatible_Level9/{{z}}/{{y}}/{{x}}.jpg'
 
         html_content = html_content.replace('{VFR_TILE_URL}', vfr_tile_url)
         html_content = html_content.replace('{SATELLITE_TILE_URL}', satellite_tile_url)
@@ -4731,7 +4630,6 @@ class MapGenerator:
         max_tracks: Optional[int] = None,
         min_points: Optional[float] = None,
         deployment_mode: str = 'local',
-        skip_satellite_tiles: bool = False,
     ) -> Path:
         """
         Generate a map for all flights from a specific airport
@@ -4741,7 +4639,6 @@ class MapGenerator:
             max_tracks: Maximum number of tracks to display (default: all)
             min_points: Minimum points score to include flights (default: all)
             deployment_mode: Deployment mode - 'local' or 'static' (for R2/CDN)
-            skip_satellite_tiles: Skip automatic satellite tile generation
 
         Returns:
             Path to generated HTML file
@@ -4878,6 +4775,5 @@ class MapGenerator:
         return self.create_map(
             airport_code,
             tracks,
-            deployment_mode=deployment_mode,
-            skip_satellite_tiles=skip_satellite_tiles
+            deployment_mode=deployment_mode
         )

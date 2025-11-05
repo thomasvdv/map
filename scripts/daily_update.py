@@ -2,7 +2,7 @@
 """
 Daily Update Orchestration Script
 
-Checks for new flights, downloads them, generates satellite tiles,
+Checks for new flights, downloads them,
 regenerates the map, and prepares files for upload to R2.
 
 Uses state tracking to avoid reprocessing already-handled dates and flights.
@@ -31,13 +31,9 @@ logger = logging.getLogger(__name__)
 class DailyUpdater:
     """Orchestrates daily flight updates with state tracking"""
 
-    def __init__(self, airport_code: str, skip_satellite_tiles: bool = False, force: bool = False):
-        self.airport_code = airport_code
-        self.skip_satellite_tiles = skip_satellite_tiles
-        self.force = force
+    def __init__(self, airport_code: str, force: bool = False):
+        self.airport_code = airport_code        self.force = force
         self.downloads_dir = Path('downloads') / airport_code
-        self.sat_tiles_dir = Path('daily_sat_tiles')
-
         # Initialize state management
         self.state = ProcessingState(airport_code)
 
@@ -96,9 +92,7 @@ class DailyUpdater:
                 'python', '-m', 'olc_downloader.cli',
                 'map',
                 '--airport-code', self.airport_code,
-                '--deployment-mode', 'static',
-                '--skip-satellite-tiles',  # We'll handle this separately
-                '--no-upload',  # Don't upload yet
+                '--deployment-mode', 'static',                '--no-upload',  # Don't upload yet
                 '--verbose'
             ]
 
@@ -125,10 +119,7 @@ class DailyUpdater:
                 new_igc_files = [f.name for f in igc_files]
                 logger.info(f"Force mode: processing all {len(new_igc_files)} flights")
 
-            # Extract dates from new flight files
-            if not self.skip_satellite_tiles:
-                self.extract_flight_dates(new_igc_files)
-
+            
             # Mark new flights as processed
             for flight_name in new_igc_files:
                 date_str = self.extract_date_from_filename(flight_name)
@@ -172,98 +163,7 @@ class DailyUpdater:
             logger.debug(f"Could not extract date from {filename}: {e}")
             return None
 
-    def extract_flight_dates(self, igc_filenames: List[str]) -> None:
-        """
-        Extract unique dates from IGC files for satellite tile generation.
 
-        Args:
-            igc_filenames: List of IGC filenames
-        """
-        logger.info("Extracting flight dates for satellite tiles...")
-
-        dates_found = set()
-
-        for filename in igc_filenames:
-            # Read the IGC file to extract the date
-            igc_path = None
-            for year_dir in self.downloads_dir.iterdir():
-                if year_dir.is_dir():
-                    potential_path = year_dir / filename
-                    if potential_path.exists():
-                        igc_path = potential_path
-                        break
-
-            if not igc_path:
-                logger.warning(f"Could not find IGC file: {filename}")
-                continue
-
-            try:
-                # Parse IGC file to get date
-                with open(igc_path, 'r', errors='ignore') as f:
-                    for line in f:
-                        # HFDTE record contains the date: HFDTEXXXXXX where XXXXXX is DDMMYY
-                        if line.startswith('HFDTE'):
-                            date_str = line[5:11]  # DDMMYY
-                            if len(date_str) == 6:
-                                day = date_str[0:2]
-                                month = date_str[2:4]
-                                year = date_str[4:6]
-                                # Assume 20XX for now
-                                full_year = f"20{year}"
-                                date = f"{full_year}-{month}-{day}"
-                                dates_found.add(date)
-                                logger.debug(f"Found date {date} in {filename}")
-                                break
-            except Exception as e:
-                logger.warning(f"Could not parse date from {filename}: {e}")
-
-        # Filter to only dates that haven't been processed
-        if not self.force:
-            new_dates = self.state.get_new_dates(dates_found)
-            self.skipped_dates = len(dates_found) - len(new_dates)
-            logger.info(f"New dates: {len(new_dates)}, Already processed: {self.skipped_dates}")
-            self.new_dates = new_dates
-        else:
-            logger.info(f"Force mode: processing all {len(dates_found)} dates")
-            self.new_dates = dates_found
-
-        logger.info(f"Dates to process for satellite tiles: {sorted(self.new_dates)}")
-
-    def generate_satellite_tiles(self) -> bool:
-        """
-        Generate satellite tiles for new flight dates.
-
-        Returns:
-            True if successful
-        """
-        if self.skip_satellite_tiles:
-            logger.info("Skipping satellite tile generation (--skip-satellite-tiles)")
-            return True
-
-        if not self.new_dates:
-            logger.info("No new dates to process for satellite tiles")
-            return True
-
-        logger.info(f"Generating satellite tiles for {len(self.new_dates)} dates...")
-
-        try:
-            for date_str in sorted(self.new_dates):
-                logger.info(f"Generating tiles for {date_str}...")
-
-                # TODO: Call actual satellite tile generation code
-                # For now, just mark as processed
-                logger.info(f"  Satellite tile generation for {date_str} completed (placeholder)")
-
-                # Mark date as processed
-                self.state.mark_date_processed(date_str, satellite_tiles_generated=True)
-
-            # Save state
-            self.state.save()
-            return True
-
-        except Exception as e:
-            logger.error(f"Failed to generate satellite tiles: {e}")
-            return False
 
     def write_summary(self, flights_downloaded: int) -> None:
         """
@@ -284,9 +184,7 @@ class DailyUpdater:
             f.write(f"New flights downloaded: {flights_downloaded}\n")
             f.write(f"Flights skipped (already processed): {self.skipped_flights}\n")
             f.write(f"New flight dates: {len(self.new_dates)}\n")
-            f.write(f"Dates skipped (already processed): {self.skipped_dates}\n")
-            f.write(f"Satellite tiles generated: {'Yes' if not self.skip_satellite_tiles else 'Skipped'}\n")
-            f.write(f"\n")
+            f.write(f"Dates skipped (already processed): {self.skipped_dates}\n")            f.write(f"\n")
             f.write(f"State Statistics:\n")
             f.write(f"  Total flights processed: {self.state.get_processed_flight_count()}\n")
             f.write(f"  Total dates with sat tiles: {self.state.get_processed_date_count()}\n")
@@ -307,9 +205,7 @@ class DailyUpdater:
             True if successful
         """
         logger.info("=== Starting Daily Update ===")
-        logger.info(f"Airport: {self.airport_code}")
-        logger.info(f"Skip satellite tiles: {self.skip_satellite_tiles}")
-        logger.info(f"Force regenerate: {self.force}")
+        logger.info(f"Airport: {self.airport_code}")        logger.info(f"Force regenerate: {self.force}")
         logger.info("")
         logger.info(self.state.get_summary())
 
@@ -325,10 +221,7 @@ class DailyUpdater:
                 self.write_summary(0)
                 return True
 
-            # Step 3: Generate satellite tiles for new dates only
-            if not self.skip_satellite_tiles:
-                self.generate_satellite_tiles()
-
+            
             # Step 4: Write summary
             self.write_summary(flights_downloaded)
 
@@ -344,15 +237,11 @@ class DailyUpdater:
 
 def main():
     parser = argparse.ArgumentParser(description='Daily OLC flight update with state tracking')
-    parser.add_argument('--airport-code', '-a', required=True, help='Airport code (e.g., STERL1)')
-    parser.add_argument('--skip-satellite-tiles', action='store_true', help='Skip satellite tile generation')
-    parser.add_argument('--force', '-f', action='store_true', help='Force regenerate everything (ignore state)')
+    parser.add_argument('--airport-code', '-a', required=True, help='Airport code (e.g., STERL1)')    parser.add_argument('--force', '-f', action='store_true', help='Force regenerate everything (ignore state)')
     args = parser.parse_args()
 
     updater = DailyUpdater(
-        airport_code=args.airport_code,
-        skip_satellite_tiles=args.skip_satellite_tiles,
-        force=args.force
+        airport_code=args.airport_code,        force=args.force
     )
 
     success = updater.run()

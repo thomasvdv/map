@@ -36,7 +36,6 @@ ENV/
 
 # Tiles (large files stored on R2)
 vfr_tiles/
-daily_sat_tiles/
 test_download/
 
 # Generated map files (large files uploaded to R2)
