@@ -7,7 +7,6 @@ __pycache__/
 build/
 develop-eggs/
 dist/
-downloads/
 eggs/
 .eggs/
 lib/
@@ -34,9 +33,6 @@ ENV/
 # Environment variables
 .env
 .env.local
-
-# Downloads
-downloads/
 
 # Tiles (large files stored on R2)
 vfr_tiles/
