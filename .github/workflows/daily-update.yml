@@ -98,6 +98,28 @@ jobs:
           echo "Uploading new/changed files to R2..."
           python scripts/r2_sync.py upload
 
+      - name: Commit and push state file
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Check if state file has changes
+          if git diff --quiet downloads/*_state.json; then
+            echo "No changes to state file"
+          else
+            echo "State file has changes, committing..."
+            git add downloads/*_state.json
+            git commit -m "Update processing state [skip ci]
+
+          Updated by daily workflow run #${{ github.run_number }}
+          Airport: ${{ github.event.inputs.airport_code || 'STERL1' }}
+
+          🤖 Generated with Claude Code"
+
+            git push
+            echo "State file committed and pushed"
+          fi
+
       - name: Summary
         if: always()
         run: |

@@ -39,6 +39,13 @@ vfr_tiles/
 daily_sat_tiles/
 test_download/
 
+# Generated map files (large files uploaded to R2)
+downloads/index.html
+downloads/flights/
+downloads/flights_manifest.json
+downloads/waypoints.json
+downloads/heatmap.json
+
 # Logs
 *.log
 

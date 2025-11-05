@@ -97,6 +97,177 @@ class MapGenerator:
     def __init__(self, output_dir: Path):
         self.output_dir = Path(output_dir)
 
+    def export_flight_data(
+        self,
+        tracks: List[FlightTrack],
+        output_dir: Path,
+        deployment_mode: str = 'local'
+    ) -> Tuple[Path, List[dict]]:
+        """
+        Export flight track data to separate JSON files for dynamic loading.
+
+        Args:
+            tracks: List of FlightTrack objects
+            output_dir: Directory to save flight data files
+            deployment_mode: Deployment mode - 'local' or 'static'
+
+        Returns:
+            Tuple of (manifest_path, list of flight metadata dicts)
+        """
+        flights_dir = output_dir / "flights"
+        flights_dir.mkdir(parents=True, exist_ok=True)
+
+        flight_metadata_list = []
+
+        logger.info(f"Exporting {len(tracks)} flights to separate JSON files...")
+
+        for i, track in enumerate(tracks):
+            # Generate unique flight ID
+            flight_id = f"flight_{i:04d}"
+
+            # Create flight data file
+            flight_data = {
+                "id": flight_id,
+                "coordinates": track.coordinates,
+                "pilot_name": track.pilot_name,
+                "pilot_display_name": track.pilot_display_name,
+                "year": track.year,
+                "flight_date": track.flight_date,
+                "aircraft": track.aircraft,
+                "duration": track.duration,
+                "distance_km": track.distance_km,
+                "avg_speed_kmh": track.avg_speed_kmh,
+                "points": track.points,
+                "filename": track.filename,
+                "dsid": track.dsid
+            }
+
+            # Save individual flight data
+            flight_file = flights_dir / f"{flight_id}.json"
+            with open(flight_file, 'w') as f:
+                json.dump(flight_data, f, separators=(',', ':'))  # Compact JSON
+
+            # Create metadata entry (no coordinates - keep manifest small)
+            metadata = {
+                "id": flight_id,
+                "file": f"flights/{flight_id}.json",
+                "pilot_name": track.pilot_name,
+                "pilot_display_name": track.pilot_display_name,
+                "year": track.year,
+                "flight_date": track.flight_date,
+                "aircraft": track.aircraft,
+                "duration": track.duration,
+                "distance_km": track.distance_km,
+                "avg_speed_kmh": track.avg_speed_kmh,
+                "points": track.points,
+                "filename": track.filename,
+                "dsid": track.dsid,
+                "color_index": i  # For consistent coloring
+            }
+
+            flight_metadata_list.append(metadata)
+
+        # Create manifest file
+        manifest_path = output_dir / "flights_manifest.json"
+        manifest = {
+            "total_flights": len(tracks),
+            "deployment_mode": deployment_mode,
+            "flights": flight_metadata_list
+        }
+
+        with open(manifest_path, 'w') as f:
+            json.dump(manifest, f, indent=2)
+
+        logger.info(f"Exported flight data:")
+        logger.info(f"  - {len(tracks)} flight JSON files in {flights_dir}")
+        logger.info(f"  - Manifest: {manifest_path}")
+
+        # Calculate size savings
+        manifest_size_mb = manifest_path.stat().st_size / (1024 * 1024)
+        total_flight_files_size_mb = sum((flights_dir / f"{f['id']}.json").stat().st_size
+                                          for f in flight_metadata_list) / (1024 * 1024)
+        logger.info(f"  - Manifest size: {manifest_size_mb:.2f} MB")
+        logger.info(f"  - Total flight files: {total_flight_files_size_mb:.2f} MB")
+
+        return manifest_path, flight_metadata_list
+
+    def export_waypoint_data(
+        self,
+        waypoints: List[dict],
+        output_dir: Path
+    ) -> Path:
+        """
+        Export waypoint data to separate JSON file for on-demand popup loading.
+
+        Args:
+            waypoints: List of waypoint dicts
+            output_dir: Directory to save waypoint data
+
+        Returns:
+            Path to waypoints JSON file
+        """
+        waypoints_path = output_dir / "waypoints.json"
+
+        # Icon configuration (matches inline version)
+        icon_config = {
+            'airport': {'color': '#E53E3E', 'icon': '✈️', 'type_label': 'Airport'},
+            'turnpoint': {'color': '#38A169', 'icon': '🎯', 'type_label': 'Turnpoint'},
+            'landmark': {'color': '#718096', 'icon': '🏔️', 'type_label': 'Landmark'},
+            'other': {'color': '#3182CE', 'icon': '📍', 'type_label': 'Waypoint'}
+        }
+
+        waypoint_data = []
+        for idx, wp in enumerate(waypoints):
+            wp_type = wp.get('type', 'other')
+            config = icon_config.get(wp_type, icon_config['other'])
+
+            waypoint_data.append({
+                'id': f'waypoint_{idx}',
+                'name': wp['name'],
+                'lat': wp['lat'],
+                'lon': wp['lon'],
+                'description': wp.get('description', 'No additional information'),
+                'type': wp_type,
+                'color': config['color'],
+                'icon': config['icon'],
+                'type_label': config['type_label']
+            })
+
+        with open(waypoints_path, 'w') as f:
+            json.dump({'waypoints': waypoint_data}, f, indent=2)
+
+        logger.info(f"Exported {len(waypoints)} waypoints to {waypoints_path}")
+        waypoints_size_kb = waypoints_path.stat().st_size / 1024
+        logger.info(f"  - Size: {waypoints_size_kb:.1f} KB")
+
+        return waypoints_path
+
+    def export_heatmap_data(
+        self,
+        heatmap_data: List[List[float]],
+        output_dir: Path
+    ) -> Path:
+        """
+        Export heatmap data to separate JSON file for on-demand loading.
+
+        Args:
+            heatmap_data: List of [lat, lon] coordinate pairs
+            output_dir: Directory to save heatmap data
+
+        Returns:
+            Path to heatmap JSON file
+        """
+        heatmap_path = output_dir / "heatmap.json"
+
+        with open(heatmap_path, 'w') as f:
+            json.dump({'coordinates': heatmap_data}, f, separators=(',', ':'))  # Compact JSON
+
+        logger.info(f"Exported {len(heatmap_data)} heatmap coordinates to {heatmap_path}")
+        heatmap_size_mb = heatmap_path.stat().st_size / (1024 * 1024)
+        logger.info(f"  - Size: {heatmap_size_mb:.1f} MB")
+
+        return heatmap_path
+
     def is_in_us(self, lat: float, lon: float) -> bool:
         """
         Check if a coordinate is within US boundaries
@@ -1990,6 +2161,172 @@ class MapGenerator:
             var mapInstance = null;
             var collectedLayers = [];
 
+            // ====================
+            // Dynamic Flight Loading
+            // ====================
+            var flightLayers = {{}};  // Store flight layers by ID for filtering
+            var flightsLoaded = false;
+
+            // Generate color for flight (matches Python color generation)
+            function generateFlightColor(index, total) {{
+                // Use HSV color space for better distribution
+                var hue = (index * 137.508) % 360;  // Golden angle for good distribution
+                var saturation = 75;
+                var value = 85;
+
+                // Convert HSV to RGB
+                var c = value * saturation / 10000;
+                var x = c * (1 - Math.abs(((hue / 60) % 2) - 1));
+                var m = value / 100 - c;
+
+                var r, g, b;
+                if (hue < 60) {{ r = c; g = x; b = 0; }}
+                else if (hue < 120) {{ r = x; g = c; b = 0; }}
+                else if (hue < 180) {{ r = 0; g = c; b = x; }}
+                else if (hue < 240) {{ r = 0; g = x; b = c; }}
+                else if (hue < 300) {{ r = x; g = 0; b = c; }}
+                else {{ r = c; g = 0; b = x; }}
+
+                r = Math.round((r + m) * 255);
+                g = Math.round((g + m) * 255);
+                b = Math.round((b + m) * 255);
+
+                return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+            }}
+
+            // Load and display flights from manifest
+            async function loadFlights() {{
+                console.log('Loading flights from manifest...');
+
+                try {{
+                    // Load manifest
+                    const manifestResponse = await fetch('flights_manifest.json');
+                    if (!manifestResponse.ok) {{
+                        throw new Error('Failed to load flights manifest');
+                    }}
+
+                    const manifest = await manifestResponse.json();
+                    console.log(`Loaded manifest with ${{manifest.total_flights}} flights`);
+
+                    // Get the flights layer group
+                    const flightsGroup = mapInstance._layers[Object.keys(mapInstance._layers).find(
+                        key => mapInstance._layers[key].options && mapInstance._layers[key].options.name === 'Individual Flights'
+                    )];
+
+                    if (!flightsGroup) {{
+                        console.error('Could not find flights layer group');
+                        return;
+                    }}
+
+                    // Load each flight (in parallel for speed)
+                    const flightPromises = manifest.flights.map((flightMeta, index) =>
+                        loadFlight(flightMeta, index, manifest.total_flights, flightsGroup)
+                    );
+
+                    await Promise.all(flightPromises);
+
+                    flightsLoaded = true;
+                    console.log(`Successfully loaded ${{manifest.total_flights}} flights`);
+
+                }} catch (error) {{
+                    console.error('Error loading flights:', error);
+                }}
+            }}
+
+            // Load individual flight data and add to map
+            async function loadFlight(flightMeta, index, total, flightsGroup) {{
+                try {{
+                    const response = await fetch(flightMeta.file);
+                    if (!response.ok) {{
+                        console.error(`Failed to load ${{flightMeta.file}}`);
+                        return;
+                    }}
+
+                    const flightData = await response.json();
+                    const color = generateFlightColor(flightMeta.color_index, total);
+
+                    // Create popup HTML
+                    let popupHtml = `<b>${{flightData.pilot_display_name}}</b><br>`;
+                    popupHtml += `Date: <a href="#" onclick="filterByDate('${{flightData.flight_date}}'); return false;" style="color: #003087; text-decoration: underline; cursor: pointer;">${{flightData.flight_date}}</a><br>`;
+                    if (flightData.aircraft) popupHtml += `Aircraft: ${{flightData.aircraft}}<br>`;
+                    if (flightData.duration) popupHtml += `Duration: ${{flightData.duration}}<br>`;
+                    if (flightData.distance_km) popupHtml += `Distance: ${{flightData.distance_km.toFixed(1)}} km<br>`;
+                    if (flightData.avg_speed_kmh) popupHtml += `Avg Speed: ${{flightData.avg_speed_kmh.toFixed(1)}} km/h<br>`;
+                    if (flightData.points) popupHtml += `Points: ${{flightData.points.toFixed(1)}}<br>`;
+
+                    if (flightData.dsid) {{
+                        const olcUrl = `https://www.onlinecontest.org/olc-3.0/gliding/flightinfo.html?dsId=${{flightData.dsid}}&f_map=`;
+                        popupHtml += `<small><a href="${{olcUrl}}" target="_blank">${{flightData.filename}}</a></small>`;
+                    }} else {{
+                        popupHtml += `<small>${{flightData.filename}}</small>`;
+                    }}
+
+                    // Create polyline
+                    const polyline = L.polyline(flightData.coordinates, {{
+                        color: color,
+                        weight: 2,
+                        opacity: 0.7
+                    }})
+                    .bindPopup(popupHtml)
+                    .bindTooltip(`${{flightData.pilot_display_name}} - ${{flightData.flight_date}}`);
+
+                    // Store flight metadata for filtering
+                    polyline.flightMeta = {{
+                        year: flightData.year,
+                        pilot: flightData.pilot_name,
+                        flight_date: flightData.flight_date,
+                        id: flightData.id
+                    }};
+
+                    flightsGroup.addLayer(polyline);
+                    flightLayers[flightData.id] = {{ line: polyline, markers: [] }};
+
+                    // Add start marker (green)
+                    if (flightData.coordinates && flightData.coordinates.length > 0) {{
+                        const startMarker = L.circleMarker(flightData.coordinates[0], {{
+                            radius: 4,
+                            color: 'green',
+                            fillColor: 'green',
+                            fillOpacity: 0.8
+                        }}).bindPopup(`<b>Start</b><br>${{flightData.pilot_display_name}}<br>${{flightData.flight_date}}`);
+
+                        startMarker.flightMeta = polyline.flightMeta;
+                        flightsGroup.addLayer(startMarker);
+                        flightLayers[flightData.id].markers.push(startMarker);
+
+                        // Add end marker (red)
+                        const endMarker = L.circleMarker(flightData.coordinates[flightData.coordinates.length - 1], {{
+                            radius: 4,
+                            color: 'red',
+                            fillColor: 'red',
+                            fillOpacity: 0.8
+                        }}).bindPopup(`<b>End</b><br>${{flightData.pilot_display_name}}<br>${{flightData.flight_date}}`);
+
+                        endMarker.flightMeta = polyline.flightMeta;
+                        flightsGroup.addLayer(endMarker);
+                        flightLayers[flightData.id].markers.push(endMarker);
+                    }}
+
+                }} catch (error) {{
+                    console.error(`Error loading flight ${{flightMeta.id}}:`, error);
+                }}
+            }}
+
+            // Initialize flight loading when map is ready
+            window.addEventListener('load', function() {{
+                setTimeout(function() {{
+                    // Find map instance
+                    var mapId = Object.keys(window).find(key => key.startsWith('map_') && window[key] && window[key]._container);
+                    if (mapId) {{
+                        mapInstance = window[mapId];
+                        console.log('Map instance found, loading flights...');
+                        loadFlights();
+                    }} else {{
+                        console.error('Could not find map instance');
+                    }}
+                }}, 500);
+            }});
+
             // Close dropdowns when clicking outside
             document.addEventListener('click', function(event) {{
                 if (!event.target.closest('.filter-dropdown')) {{
@@ -2047,8 +2384,8 @@ class MapGenerator:
                     return;
                 }}
 
-                if (collectedLayers.length === 0) {{
-                    console.error('Layers not collected yet - wait for map to load');
+                if (!flightsLoaded) {{
+                    console.log('Flights not yet loaded, waiting...');
                     return;
                 }}
 
@@ -2081,41 +2418,42 @@ class MapGenerator:
                 var hidden = 0;
                 var matched = 0;
 
-                // Loop through trackMetadata and access layer objects by their variable names
-                for (var i = 0; i < trackMetadata.length; i++) {{
-                    var meta = trackMetadata[i];
-                    var layerId = meta.layer_id;
+                // Loop through dynamically loaded flights
+                Object.keys(flightLayers).forEach(function(flightId) {{
+                    var flight = flightLayers[flightId];
+                    var meta = flight.line.flightMeta;
 
-                    // Access the layer object from the global window object
-                    var layer = window[layerId];
-
-                    if (!layer) {{
-                        console.warn('Could not find layer:', layerId);
-                        continue;
+                    if (!meta) {{
+                        console.warn('Flight missing metadata:', flightId);
+                        return;
                     }}
 
                     matched++;
 
                     // Check if this track matches the filters
                     var yearMatch = selectedYears.indexOf(meta.year) >= 0;
-                    // Check if raw pilot name is in the selected raw names
                     var pilotMatch = selectedRawPilotNames.indexOf(meta.pilot) >= 0;
 
-                    // Show layer only if BOTH year and pilot are selected
+                    // Show/hide flight layers (polyline + markers)
+                    var layers = [flight.line].concat(flight.markers);
                     if (yearMatch && pilotMatch) {{
-                        if (!mapInstance.hasLayer(layer)) {{
-                            mapInstance.addLayer(layer);
-                            shown++;
-                        }}
+                        layers.forEach(function(layer) {{
+                            if (!mapInstance.hasLayer(layer)) {{
+                                mapInstance.addLayer(layer);
+                                shown++;
+                            }}
+                        }});
                     }} else {{
-                        if (mapInstance.hasLayer(layer)) {{
-                            mapInstance.removeLayer(layer);
-                            hidden++;
-                        }}
+                        layers.forEach(function(layer) {{
+                            if (mapInstance.hasLayer(layer)) {{
+                                mapInstance.removeLayer(layer);
+                                hidden++;
+                            }}
+                        }});
                     }}
-                }}
+                }});
 
-                console.log('Filter applied - Matched:', matched, 'layers, Shown:', shown, 'Hidden:', hidden);
+                console.log('Filter applied - Matched:', matched, 'flights, Layers shown:', shown, 'Layers hidden:', hidden);
             }}
 
             // Store active date filter
@@ -2969,26 +3307,85 @@ class MapGenerator:
             if "Thomas_Van_de_Velde" in track.filename:
                 logger.info(f"Heatmap: {track.filename} - {original_count} coords with distance-based weighting")
 
-        # Create heatmap layer
-        # Note: We add it to the map (show=True) and JavaScript will remove it initially
-        heat_map_layer = HeatMap(
-            heatmap_data,
-            name='Flight Path Density',
-            min_opacity=0.3,
-            max_zoom=13,
-            radius=18,  # Increased from 12 to make individual flights more visible
-            blur=20,    # Increased from 15 for smoother appearance
-            max=2.0,    # Decreased from 4.0 to make low-intensity areas more visible
-            gradient={
-                0.0: 'blue',
-                0.3: 'lime',
-                0.5: 'yellow',
-                0.7: 'orange',
-                1.0: 'red'
-            },
-            show=True  # Add to map so JavaScript can find it
-        )
-        heat_map_layer.add_to(flight_map)
+        # Export heatmap data to external file
+        self.export_heatmap_data(heatmap_data, self.output_dir)
+
+        # Add placeholder heatmap layer (data loaded dynamically via JavaScript)
+        # Create an empty layer that JavaScript will populate
+        placeholder_heatmap = folium.FeatureGroup(name='Flight Path Density')
+        placeholder_heatmap.add_to(flight_map)
+
+        # Add JavaScript to load heatmap dynamically
+        heatmap_loader_js = '''
+        <script>
+        // Dynamic heatmap loader
+        var heatmapLayer = null;
+        var heatmapLoaded = false;
+
+        async function loadHeatmapData() {
+            if (heatmapLoaded) return;
+            try {
+                console.log('Loading heatmap data...');
+                const response = await fetch('heatmap.json');
+                if (!response.ok) throw new Error('Failed to load heatmap');
+                const data = await response.json();
+
+                // Find the main map
+                let mainMap = null;
+                for (let key in window) {
+                    try {
+                        if (window[key] && window[key]._leaflet_id && window[key].getCenter) {
+                            mainMap = window[key];
+                            break;
+                        }
+                    } catch(e) {}
+                }
+
+                if (mainMap && data.coordinates) {
+                    // Create heatmap layer
+                    heatmapLayer = L.heatLayer(data.coordinates, {
+                        minOpacity: 0.3,
+                        maxZoom: 13,
+                        radius: 18,
+                        blur: 20,
+                        max: 2.0,
+                        gradient: {
+                            0.0: 'blue',
+                            0.3: 'lime',
+                            0.5: 'yellow',
+                            0.7: 'orange',
+                            1.0: 'red'
+                        }
+                    });
+
+                    // Don't add to map by default - let layer control handle it
+                    // heatmapLayer.addTo(mainMap);
+
+                    heatmapLoaded = true;
+                    console.log('Heatmap loaded:', data.coordinates.length, 'points');
+
+                    // Add to layer control if it exists
+                    if (mainMap._layers) {
+                        // Find the layer control and add our heatmap
+                        Object.values(mainMap._layers).forEach(layer => {
+                            if (layer._map === mainMap && heatmapLayer && !mainMap.hasLayer(heatmapLayer)) {
+                                // Layer will be controlled by Leaflet's layer control
+                            }
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading heatmap:', error);
+            }
+        }
+
+        // Load heatmap when page loads (but don't add to map automatically)
+        window.addEventListener('load', function() {
+            setTimeout(loadHeatmapData, 1000);
+        });
+        </script>
+        '''
+        flight_map.get_root().html.add_child(folium.Element(heatmap_loader_js))
 
         # Add popular route segments as polylines with logarithmic scaling
         import math
@@ -3149,9 +3546,6 @@ class MapGenerator:
                 }
             }
 
-            # Track minimap data for initialization
-            waypoint_minimap_data = []
-
             for idx, wp in enumerate(waypoints):
                 wp_type = wp.get('type', 'other')
                 config = icon_config.get(wp_type, icon_config['other'])
@@ -3167,291 +3561,128 @@ class MapGenerator:
                 ">{config['icon']}</div>
                 '''
 
-                # Create detailed popup with info panel and embedded satellite map
-                description_html = wp['description'].replace('\n', '<br>') if wp['description'] else 'No additional information'
+                # Create minimal loading placeholder popup (content loaded on-demand)
+                popup_html = f'<div id="waypoint_popup_loading_{idx}" style="padding: 20px; text-align: center;">Loading...</div>'
 
-                # Unique ID for this waypoint's mini-map
-                minimap_id = f"minimap_{idx}"
-
-                popup_html = f'''
-                <div style="
-                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', sans-serif;
-                    min-width: 340px;
-                    max-width: 380px;
-                    user-select: none;
-                    -webkit-user-select: none;
-                ">
-                    <!-- Header -->
-                    <div style="
-                        background: linear-gradient(135deg, {config['color']}F5 0%, {config['color']}E0 100%);
-                        color: white;
-                        padding: 16px 20px;
-                        margin: -20px -20px 16px -20px;
-                        border-radius: 8px 8px 0 0;
-                        box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-                    ">
-                        <div style="
-                            font-size: 18px;
-                            font-weight: 600;
-                            margin-bottom: 4px;
-                            letter-spacing: -0.02em;
-                            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-                        ">
-                            {wp['name']}
-                        </div>
-                        <div style="
-                            font-size: 12px;
-                            opacity: 0.92;
-                            display: inline-flex;
-                            align-items: center;
-                            gap: 5px;
-                            background: rgba(255,255,255,0.15);
-                            padding: 3px 10px;
-                            border-radius: 12px;
-                            backdrop-filter: blur(4px);
-                        ">
-                            <span style="font-size: 14px;">{config['icon']}</span>
-                            <span style="font-weight: 500;">{config['type_label']}</span>
-                        </div>
-                    </div>
-
-                    <div style="padding: 0 4px 8px;">
-                        <!-- Info Grid -->
-                        <div style="
-                            display: grid;
-                            gap: 10px;
-                            margin-bottom: 14px;
-                        ">
-                            <!-- Description -->
-                            <div style="
-                                background: #FAFBFC;
-                                border-radius: 6px;
-                                padding: 11px 13px;
-                                font-size: 12.5px;
-                                line-height: 1.5;
-                                color: #374151;
-                                border: 1px solid #E5E7EB;
-                                box-shadow: 0 1px 2px rgba(0,0,0,0.02);
-                            ">
-                                {description_html}
-                            </div>
-
-                            <!-- Coordinates Card -->
-                            <div style="
-                                background: linear-gradient(to right, #F9FAFB, #F3F4F6);
-                                border-radius: 6px;
-                                padding: 10px 12px;
-                                border: 1px solid #E5E7EB;
-                            ">
-                                <div style="
-                                    font-size: 10px;
-                                    font-weight: 600;
-                                    color: #6B7280;
-                                    text-transform: uppercase;
-                                    letter-spacing: 0.05em;
-                                    margin-bottom: 5px;
-                                ">
-                                    📍 Coordinates
-                                </div>
-                                <div style="display: flex; align-items: center; justify-content: space-between;">
-                                    <span id="coords_{idx}" style="
-                                        user-select: text;
-                                        -webkit-user-select: text;
-                                        font-family: 'SF Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
-                                        font-size: 13px;
-                                        color: #1F2937;
-                                        font-weight: 500;
-                                        background: white;
-                                        padding: 5px 10px;
-                                        border-radius: 4px;
-                                        border: 1px solid #D1D5DB;
-                                        cursor: text;
-                                    ">{wp['lat']:.5f}°, {wp['lon']:.5f}°</span>
-                                    <button onclick="
-                                        var coords = document.getElementById('coords_{idx}').textContent;
-                                        navigator.clipboard.writeText(coords);
-                                        this.textContent = '✓';
-                                        this.style.background = '#10B981';
-                                        setTimeout(() => {{ this.textContent = '📋'; this.style.background = '#3B82F6'; }}, 1500);
-                                    " style="
-                                        background: #3B82F6;
-                                        color: white;
-                                        border: none;
-                                        border-radius: 4px;
-                                        padding: 5px 10px;
-                                        font-size: 14px;
-                                        cursor: pointer;
-                                        transition: all 0.2s;
-                                        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-                                        margin-left: 6px;
-                                    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">📋</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Satellite View -->
-                        <div style="
-                            background: #FAFBFC;
-                            border-radius: 6px;
-                            padding: 10px;
-                            border: 1px solid #E5E7EB;
-                        ">
-                            <div style="
-                                font-size: 11px;
-                                font-weight: 600;
-                                color: #6B7280;
-                                text-transform: uppercase;
-                                letter-spacing: 0.05em;
-                                margin-bottom: 8px;
-                                display: flex;
-                                align-items: center;
-                                gap: 5px;
-                            ">
-                                <span style="font-size: 13px;">🛰️</span>
-                                <span>Satellite View</span>
-                            </div>
-                            <div id="{minimap_id}" style="
-                                width: 100%;
-                                height: 180px;
-                                border-radius: 4px;
-                                overflow: hidden;
-                                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                                border: 1px solid #D1D5DB;
-                                background: #F3F4F6;
-                            "></div>
-                        </div>
-                    </div>
-                </div>
-                '''
-
-                # Create marker with popup event handlers to initialize mini-map
-                # Configure popup with padding to avoid top controls and left sidebar
+                # Create marker with simple placeholder popup
+                # Actual content will be loaded via JavaScript when clicked
                 marker = folium.Marker(
                     location=[wp['lat'], wp['lon']],
                     popup=folium.Popup(
                         popup_html,
                         max_width=400,
-                        autoPanPaddingTopLeft=[380, 120],  # Extra padding: 380px left for sidebar, 120px top for controls
+                        autoPanPaddingTopLeft=[380, 120],
                         autoPanPaddingBottomRight=[20, 20]
                     ),
                     tooltip=wp['name'],
                     icon=folium.DivIcon(html=icon_html)
                 )
 
+                # Store waypoint ID for popup loading
+                marker.options['waypoint_id'] = f'waypoint_{idx}'
+
                 # Add the marker to the group
                 marker.add_to(waypoint_group)
 
-                # Store minimap initialization data for this waypoint
-                waypoint_minimap_data.append({
-                    'id': minimap_id,
-                    'lat': wp['lat'],
-                    'lon': wp['lon'],
-                    'color': config['color']
-                })
-
             waypoint_group.add_to(flight_map)
-            logger.info(f"Added {len(waypoints)} Sterling waypoints to map")
+            logger.info(f"Added {len(waypoints)} Sterling waypoints to map (popups load on-demand)")
 
-            # Add global event handler for minimap initialization
-            # This uses Leaflet's 'popupopen' event which is more reliable than trying to find markers
-            if waypoint_minimap_data:
-                minimap_init_js = '''
-                <script>
-                // Wait for page to fully load including Leaflet library and map
-                window.addEventListener('load', function() {
-                    console.log('Initializing waypoint minimap system...');
+            # Export waypoint data to external file
+            self.export_waypoint_data(waypoints, self.output_dir)
 
-                    // Store minimap instances to avoid recreating them
-                    var minimaps = {};
+            # Add on-demand waypoint popup loader
+            waypoint_loader_js = '''
+            <script>
+            // On-demand waypoint popup loader
+            var waypointData = null;
+            var loadedPopups = {};
 
-                    // Minimap data for all waypoints
-                    var minimapData = ''' + str(waypoint_minimap_data).replace("'", '"') + ''';
+            async function loadWaypointData() {
+                if (waypointData) return waypointData;
+                try {
+                    const response = await fetch('waypoints.json');
+                    if (!response.ok) throw new Error('Failed to load waypoints');
+                    const data = await response.json();
+                    waypointData = data.waypoints;
+                    console.log('Loaded', waypointData.length, 'waypoints');
+                    return waypointData;
+                } catch (error) {
+                    console.error('Error loading waypoints:', error);
+                    return null;
+                }
+            }
 
-                    // Find the main map object
-                    var mainMap = null;
-                    for (var key in window) {
-                        try {
-                            if (window[key] && window[key]._leaflet_id && window[key].getCenter) {
-                                mainMap = window[key];
-                                break;
-                            }
-                        } catch(e) {}
-                    }
+            function renderWaypointPopup(wp, idx) {
+                return `<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-width: 340px; max-width: 380px;">
+                    <div style="background: linear-gradient(135deg, ${wp.color}F5 0%, ${wp.color}E0 100%); color: white; padding: 16px 20px; margin: -20px -20px 16px -20px; border-radius: 8px 8px 0 0;">
+                        <div style="font-size: 18px; font-weight: 600; margin-bottom: 4px;">${wp.name}</div>
+                        <div style="font-size: 12px; opacity: 0.92;"><span style="font-size: 14px;">${wp.icon}</span> <span>${wp.type_label}</span></div>
+                    </div>
+                    <div style="padding: 0 4px 8px;">
+                        <div style="background: #FAFBFC; border-radius: 6px; padding: 11px 13px; margin-bottom: 10px; font-size: 12.5px; line-height: 1.5;">${wp.description}</div>
+                        <div style="background: #F9FAFB; border-radius: 6px; padding: 10px 12px;">
+                            <div style="font-size: 10px; font-weight: 600; color: #6B7280; margin-bottom: 5px;">📍 COORDINATES</div>
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <span id="coords_${idx}" style="font-family: monospace; font-size: 13px; background: white; padding: 5px 10px; border-radius: 4px;">${wp.lat.toFixed(5)}°, ${wp.lon.toFixed(5)}°</span>
+                                <button onclick="navigator.clipboard.writeText(document.getElementById('coords_${idx}').textContent); this.textContent='✓'; setTimeout(()=>this.textContent='📋',1500);" style="background:#3B82F6;color:white;border:none;border-radius:4px;padding:5px 10px;cursor:pointer;margin-left:6px;">📋</button>
+                            </div>
+                        </div>
+                        <div style="background: #FAFBFC; border-radius: 6px; padding: 10px; margin-top: 10px;">
+                            <div style="font-size: 11px; font-weight: 600; color: #6B7280; margin-bottom: 8px;"><span>🛰️</span> SATELLITE VIEW</div>
+                            <div id="minimap_${idx}" style="width:100%;height:180px;border-radius:4px;background:#F3F4F6;"></div>
+                        </div>
+                    </div>
+                </div>`;
+            }
 
-                    if (mainMap) {
-                        // Listen for popup open events
-                        mainMap.on('popupopen', function(e) {
-                            // Small delay to ensure popup DOM is ready
-                            setTimeout(function() {
-                                // Find all minimap divs in the opened popup
-                                for (var i = 0; i < minimapData.length; i++) {
-                                    var data = minimapData[i];
-                                    var minimapDiv = document.getElementById(data.id);
+            function initWaypointMinimap(wp, idx) {
+                const minimapId = 'minimap_' + idx;
+                const minimapDiv = document.getElementById(minimapId);
+                if (!minimapDiv || loadedPopups[minimapId]) return;
+                try {
+                    const minimap = L.map(minimapId, {center:[wp.lat,wp.lon],zoom:16,zoomControl:false,dragging:true,scrollWheelZoom:false,doubleClickZoom:false,boxZoom:false,keyboard:false,tap:false});
+                    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19}).addTo(minimap);
+                    L.circleMarker([wp.lat,wp.lon],{radius:6,fillColor:wp.color,color:'white',weight:2,fillOpacity:0.9}).addTo(minimap);
+                    L.control.zoom({position:'topright'}).addTo(minimap);
+                    loadedPopups[minimapId]=true;
+                    setTimeout(()=>minimap.invalidateSize(),10);
+                } catch(e) {
+                    console.error('Error creating minimap:',e);
+                    minimapDiv.innerHTML='<div style="padding:20px;text-align:center;color:#718096;">Satellite view unavailable</div>';
+                }
+            }
 
-                                    if (minimapDiv && !minimapDiv._leaflet_id && !minimaps[data.id]) {
-                                        try {
-                                            console.log('Initializing minimap:', data.id);
-
-                                            // Create mini-map with satellite imagery
-                                            var minimap = L.map(data.id, {
-                                                center: [data.lat, data.lon],
-                                                zoom: 16,
-                                                zoomControl: false,
-                                                scrollWheelZoom: false,
-                                                dragging: true,
-                                                doubleClickZoom: false,
-                                                boxZoom: false,
-                                                keyboard: false,
-                                                tap: false
-                                            });
-
-                                            // Add satellite tile layer (HTTPS for R2 deployment)
-                                            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                                                attribution: 'Esri',
-                                                maxZoom: 19,
-                                                errorTileUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgZmlsbD0iI2YwZjBmMCIvPjwvc3ZnPg=='
-                                            }).addTo(minimap);
-
-                                            // Add a small center marker
-                                            L.circleMarker([data.lat, data.lon], {
-                                                radius: 6,
-                                                fillColor: data.color,
-                                                color: 'white',
-                                                weight: 2,
-                                                opacity: 1,
-                                                fillOpacity: 0.9
-                                            }).addTo(minimap);
-
-                                            // Add zoom controls
-                                            L.control.zoom({
-                                                position: 'topright'
-                                            }).addTo(minimap);
-
-                                            // Store reference
-                                            minimaps[data.id] = minimap;
-
-                                            console.log('Minimap initialized successfully:', data.id);
-                                        } catch(e) {
-                                            console.error('Failed to create waypoint mini-map:', data.id, e);
-                                            minimapDiv.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#718096;font-size:13px;padding:20px;text-align:center;">Satellite view unavailable<br><small>' + e.message + '</small></div>';
-                                        }
-                                    }
+            window.addEventListener('load',function(){
+                let mainMap=null;
+                for(let key in window){try{if(window[key]&&window[key]._leaflet_id&&window[key].getCenter){mainMap=window[key];break;}}catch(e){}}
+                if(mainMap){
+                    mainMap.on('popupopen',async function(e){
+                        const popup=e.popup;
+                        const popupContent=popup.getContent();
+                        if(popupContent&&popupContent.includes('waypoint_popup_loading_')){
+                            const match=popupContent.match(/waypoint_popup_loading_(\\d+)/);
+                            if(match){
+                                const idx=parseInt(match[1]);
+                                const waypoints=await loadWaypointData();
+                                if(waypoints&&waypoints[idx]){
+                                    const wp=waypoints[idx];
+                                    popup.setContent(renderWaypointPopup(wp,idx));
+                                    popup.update();
+                                    setTimeout(()=>initWaypointMinimap(wp,idx),100);
                                 }
-                            }, 100);
-                        });
+                            }
+                        }
+                    });
+                    console.log('Waypoint on-demand popup loader initialized');
+                }
+            });
+            </script>
+            '''
+            flight_map.get_root().html.add_child(folium.Element(waypoint_loader_js))
 
-                        console.log('Waypoint minimap handler registered for', minimapData.length, 'waypoints');
-                    } else {
-                        console.error('Could not find main map object for minimap initialization');
-                    }
-                });  // end window.load event listener
-                </script>
-                '''
-                flight_map.get_root().html.add_child(folium.Element(minimap_init_js))
-
-                # Add custom CSS for popup styling
-                popup_css = '''
-                <style>
+            # Add custom CSS for popup styling
+            popup_css = '''
+            <style>
                     /* Fix close button positioning and styling */
                     .leaflet-popup-close-button {
                         position: absolute !important;
@@ -3500,7 +3731,7 @@ class MapGenerator:
                     }
                 </style>
                 '''
-                flight_map.get_root().html.add_child(folium.Element(popup_css))
+            flight_map.get_root().html.add_child(folium.Element(popup_css))
 
         # Add popular tasks visualization
         if popular_tasks:
@@ -3624,95 +3855,23 @@ class MapGenerator:
         flights_group = folium.FeatureGroup(name='Individual Flights', show=True)
         flights_group.add_to(flight_map)  # Add to map immediately
 
-        # Add each flight track to the flights group and collect metadata
+        # NOTE: Flight tracks are NOT added to the map here - they will be loaded dynamically
+        # from separate JSON files to keep HTML file small. See flights_manifest.json.
+
+        # Build minimal track metadata for filtering (no coordinates)
         track_metadata = []
         for i, track in enumerate(tracks):
-            color = self.generate_color(i, len(tracks))
-
-            # Create detailed popup HTML
-            popup_html = f"<b>{track.pilot_display_name}</b><br>"
-            popup_html += f'Date: <a href="#" onclick="filterByDate(\'{track.flight_date}\'); return false;" style="color: #003087; text-decoration: underline; cursor: pointer;" title="Show only flights from this date">{track.flight_date}</a><br>'
-            if track.aircraft:
-                popup_html += f"Aircraft: {track.aircraft}<br>"
-            if track.duration:
-                popup_html += f"Duration: {track.duration}<br>"
-            if track.distance_km:
-                popup_html += f"Distance: {track.distance_km:.1f} km<br>"
-            if track.avg_speed_kmh:
-                popup_html += f"Avg Speed: {track.avg_speed_kmh:.1f} km/h<br>"
-            if track.points:
-                popup_html += f"Points: {track.points:.1f}<br>"
-
-            # Add filename as link to OLC flight detail page if we have dsid
-            if track.dsid:
-                olc_url = f"https://www.onlinecontest.org/olc-3.0/gliding/flightinfo.html?dsId={track.dsid}&f_map="
-                popup_html += f'<small><a href="{olc_url}" target="_blank">{track.filename}</a></small>'
-            else:
-                popup_html += f"<small>{track.filename}</small>"
-
-            # Create the track elements with flight index for route toggling
-            track_line = folium.PolyLine(
-                track.coordinates,
-                color=color,
-                weight=2,
-                opacity=0.7,
-                popup=popup_html,
-                tooltip=f"{track.pilot_display_name} - {track.flight_date}",
-                # Add custom option for route toggle matching
-            )
-            # Add flightIdx and flightDate as custom options (accessible in JS via layer.options)
-            track_line.options['flightIdx'] = i
-            track_line.options['flightDate'] = track.flight_date  # For satellite date switching
-            track_line.add_to(flights_group)
-
-            # Store metadata for this track (will be injected as JavaScript)
+            # Store metadata for this track (will be used by JavaScript for filtering)
             track_metadata.append({
-                'layer_id': track_line.get_name(),
+                'flight_id': f"flight_{i:04d}",
                 'year': track.year,
                 'pilot': track.pilot_name,
-                'flight_date': track.flight_date,  # Add date to metadata
+                'pilot_display_name': track.pilot_display_name,
+                'flight_date': track.flight_date,
                 'type': 'line'
             })
 
-            # Add start and end markers
-            if track.coordinates:
-                start_marker = folium.CircleMarker(
-                    location=track.coordinates[0],
-                    radius=4,
-                    color='green',
-                    fill=True,
-                    fillColor='green',
-                    fillOpacity=0.8,
-                    popup=f"<b>Start</b><br>{track.pilot_display_name}<br>{track.flight_date}",
-                )
-                start_marker.add_to(flights_group)
-
-                track_metadata.append({
-                    'layer_id': start_marker.get_name(),
-                    'year': track.year,
-                    'pilot': track.pilot_name,
-                    'type': 'marker'
-                })
-
-                end_marker = folium.CircleMarker(
-                    location=track.coordinates[-1],
-                    radius=4,
-                    color='red',
-                    fill=True,
-                    fillColor='red',
-                    fillOpacity=0.8,
-                    popup=f"<b>End</b><br>{track.pilot_display_name}<br>{track.flight_date}",
-                )
-                end_marker.add_to(flights_group)
-
-                track_metadata.append({
-                    'layer_id': end_marker.get_name(),
-                    'year': track.year,
-                    'pilot': track.pilot_name,
-                    'type': 'marker'
-                })
-
-        logger.info(f"Added {len(tracks)} individual flight tracks to toggleable layer (starts hidden)")
+        logger.info(f"Prepared metadata for {len(tracks)} flight tracks (coordinates in separate JSON files)")
 
         # Add title
         num_years = len(tracks_by_year)
@@ -4513,13 +4672,21 @@ class MapGenerator:
         else:
             logger.info("Skipping satellite tile generation (--skip-satellite-tiles flag set)")
 
-        # Save map
+        # Export flight data to separate JSON files before saving map
         if output_file is None:
             output_file = self.output_dir / "index.html"
         else:
             output_file = Path(output_file)
 
         output_file.parent.mkdir(parents=True, exist_ok=True)
+
+        # Export flights to external files (not embedded in HTML)
+        manifest_path, flight_metadata_list = self.export_flight_data(
+            tracks=tracks,
+            output_dir=output_file.parent,
+            deployment_mode=deployment_mode
+        )
+
         flight_map.save(str(output_file))
 
         # Post-process HTML to replace VFR tile URL placeholder based on deployment mode
