@@ -13,6 +13,7 @@ on:
       min_points:
         description: 'Minimum points filter'
         required: false
+        default: '400'
       skip_download:
         description: 'Skip downloading flights (use existing data)'
         required: false
