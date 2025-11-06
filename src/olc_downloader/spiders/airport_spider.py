@@ -61,25 +61,43 @@ class OLCAirportFlightsSpider(scrapy.Spider):
 
                 for flight in data.get('flights', []):
                     dsid = flight.get('dsid')
-                    filename = flight.get('filename')
+                    download_status = flight.get('download_status')
+                    distance = flight.get('distance')
+                    speed = flight.get('speed')
+                    aircraft = flight.get('aircraft')
 
-                    if dsid and filename:
-                        # Verify the file actually exists and is valid
-                        file_path = year_dir / filename
-                        if file_path.exists():
-                            # Quick validation: check it's not HTML
-                            try:
-                                with open(file_path, 'r', encoding='latin-1') as f:
-                                    first_line = f.readline().strip()
-                                    # Only skip if it's a valid IGC file
-                                    if first_line.startswith('A') or first_line.startswith('H'):
-                                        self.downloaded_dsids.add(dsid)
-                                        from_metadata += 1
-                                    else:
-                                        logger.debug(f"Skipping invalid file in metadata: {filename}")
-                            except:
-                                # If we can't read it, don't trust it
-                                logger.debug(f"Could not validate file in metadata: {filename}")
+                    if dsid:
+                        # Skip if we've already parsed the flightinfo from OLC
+                        # We trust the metadata if it has download_status and metadata fields populated
+                        # This prevents re-scraping the OLC website for flights we've already processed,
+                        # even if the IGC file is missing (e.g., not committed to git)
+                        if download_status == 'downloaded' and distance is not None:
+                            self.downloaded_dsids.add(dsid)
+                            from_metadata += 1
+                            logger.debug(f"Skipping {dsid} (already parsed from OLC, in metadata)")
+                        elif download_status == 'failed':
+                            # Don't skip failed downloads - allow retry
+                            logger.debug(f"Not skipping {dsid} (previous download failed)")
+                        else:
+                            # No download status or incomplete metadata - check if file exists
+                            filename = flight.get('filename')
+                            if filename:
+                                file_path = year_dir / filename
+                                if file_path.exists():
+                                    # Quick validation: check it's not HTML
+                                    try:
+                                        with open(file_path, 'r', encoding='latin-1') as f:
+                                            first_line = f.readline().strip()
+                                            # Only skip if it's a valid IGC file
+                                            if first_line.startswith('A') or first_line.startswith('H'):
+                                                self.downloaded_dsids.add(dsid)
+                                                from_metadata += 1
+                                                logger.debug(f"Skipping {dsid} (validated IGC file exists)")
+                                            else:
+                                                logger.debug(f"Skipping invalid file in metadata: {filename}")
+                                    except:
+                                        # If we can't read it, don't trust it
+                                        logger.debug(f"Could not validate file in metadata: {filename}")
 
             except Exception as e:
                 logger.warning(f"Failed to load metadata from {metadata_path}: {e}")
