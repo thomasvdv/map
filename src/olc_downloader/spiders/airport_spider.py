@@ -38,12 +38,17 @@ class OLCAirportFlightsSpider(scrapy.Spider):
 
         # Load existing metadata to skip already downloaded flights
         if self.output_dir:
+            logger.info(f"Loading existing metadata for {self.airport_code}/{self.year} from {self.output_dir}")
             self._load_existing_metadata()
+        else:
+            logger.warning(f"No output_dir set - will not skip already downloaded flights")
 
     def _load_existing_metadata(self):
         """Load existing metadata AND scan filesystem to determine which flights are already downloaded"""
         year_dir = self.output_dir / self.airport_code / self.year
         metadata_path = year_dir / "metadata.json"
+
+        logger.info(f"Checking for metadata at: {metadata_path}")
 
         from_metadata = 0
         from_filesystem = 0
