@@ -100,15 +100,12 @@ jobs:
           echo "Satellite imagery served directly from NASA GIBS"
 
           # Build command with optional parameters
-          CMD="python -m olc_downloader.cli map --airport-code $AIRPORT_CODE"
+          CMD="python scripts/generate_map.py --airport-code $AIRPORT_CODE --workflow-type github-actions"
 
           [ -n "$YEAR" ] && CMD="$CMD --year $YEAR"
           [ -n "$MIN_POINTS" ] && CMD="$CMD --min-points $MIN_POINTS"
           [ "$SKIP_DOWNLOAD" = "true" ] && CMD="$CMD --skip-download"
           [ "$FORCE" = "true" ] && CMD="$CMD --force"
-
-          # Add deployment mode and no-upload flag
-          CMD="$CMD --deployment-mode static --no-upload --verbose"
 
           echo "Running: $CMD"
           eval $CMD
@@ -121,13 +118,6 @@ jobs:
         run: |
           echo "Uploading to R2..."
           python -m olc_downloader.cli upload-to-r2 --all --verbose
-
-      - name: Commit and push flight data and state
-        uses: ./.github/actions/commit-push-flights
-        with:
-          airport_code: ${{ inputs.airport_code }}
-          workflow_type: 'manual'
-          run_number: ${{ github.run_number }}
 
       - name: Display public URL
         env:

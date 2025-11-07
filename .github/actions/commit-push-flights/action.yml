@@ -18,24 +18,4 @@ runs:
     - name: Commit and push flight data and state
       shell: bash
       run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
-
-        # Add IGC files and metadata
-        git add downloads/**/*.igc downloads/**/metadata.json downloads/*_state.json
-
-        # Check if there are any changes
-        if git diff --staged --quiet; then
-          echo "No changes to commit"
-        else
-          echo "Committing flight data and state..."
-          git commit -m "Update flights and metadata [skip ci]
-
-        Updated by ${{ inputs.workflow_type }} workflow run #${{ inputs.run_number }}
-        Airport: ${{ inputs.airport_code }}
-
-        🤖 Generated with Claude Code"
-
-          git push
-          echo "Flight data and state committed and pushed"
-        fi
+        ./scripts/commit_and_push_flights.sh "${{ inputs.airport_code }}" "${{ inputs.workflow_type }}" "${{ inputs.run_number }}"

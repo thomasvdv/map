@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-Daily Update Orchestration Script
+Flight Update Orchestration Script
 
 Checks for new flights, downloads them,
 regenerates the map, and prepares files for upload to R2.
 
 Uses state tracking to avoid reprocessing already-handled dates and flights.
 Designed for stateless CI/CD environments (GitHub Actions).
+Can be run on any schedule (daily, weekly, etc.) or manually.
 """
 
 import os
@@ -18,6 +19,7 @@ from pathlib import Path
 from datetime import datetime
 from typing import List, Set
 import re
+from typing import Optional
 
 # Add parent directory to path to import olc_downloader
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -28,11 +30,15 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 
-class DailyUpdater:
-    """Orchestrates daily flight updates with state tracking"""
+class FlightUpdater:
+    """Orchestrates flight updates with state tracking"""
 
-    def __init__(self, airport_code: str, force: bool = False):
-        self.airport_code = airport_code        self.force = force
+    def __init__(self, airport_code: str, force: bool = False, skip_commit: bool = False,
+                 workflow_type: str = "local"):
+        self.airport_code = airport_code
+        self.force = force
+        self.skip_commit = skip_commit
+        self.workflow_type = workflow_type
         self.downloads_dir = Path('downloads') / airport_code
         # Initialize state management
         self.state = ProcessingState(airport_code)
@@ -165,6 +171,46 @@ class DailyUpdater:
 
 
 
+    def commit_and_push(self) -> bool:
+        """
+        Commit and push IGC files, metadata, and state to git.
+
+        Returns:
+            True if successful or skipped, False on error
+        """
+        if self.skip_commit:
+            logger.info("Skipping git commit (--skip-commit flag)")
+            return True
+
+        logger.info("Committing and pushing flight data to git...")
+
+        try:
+            # Call the commit script
+            script_path = Path(__file__).parent / 'commit_and_push_flights.sh'
+            run_number = os.getenv('GITHUB_RUN_NUMBER', str(int(datetime.now().timestamp())))
+
+            cmd = [
+                str(script_path),
+                self.airport_code,
+                self.workflow_type,
+                run_number
+            ]
+
+            result = subprocess.run(cmd, capture_output=False, text=True)
+
+            if result.returncode != 0:
+                logger.error("Failed to commit and push changes")
+                return False
+
+            logger.info("Successfully committed and pushed changes")
+            return True
+
+        except Exception as e:
+            logger.error(f"Failed to commit and push: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
+
     def write_summary(self, flights_downloaded: int) -> None:
         """
         Write a summary of the update.
@@ -204,8 +250,9 @@ class DailyUpdater:
         Returns:
             True if successful
         """
-        logger.info("=== Starting Daily Update ===")
-        logger.info(f"Airport: {self.airport_code}")        logger.info(f"Force regenerate: {self.force}")
+        logger.info("=== Starting Flight Update ===")
+        logger.info(f"Airport: {self.airport_code}")
+        logger.info(f"Force regenerate: {self.force}")
         logger.info("")
         logger.info(self.state.get_summary())
 
@@ -221,27 +268,37 @@ class DailyUpdater:
                 self.write_summary(0)
                 return True
 
-            
-            # Step 4: Write summary
+
+            # Step 4: Commit and push changes
+            if not self.commit_and_push():
+                logger.warning("Failed to commit changes, but continuing...")
+
+            # Step 5: Write summary
             self.write_summary(flights_downloaded)
 
-            logger.info("=== Daily Update Complete ===")
+            logger.info("=== Flight Update Complete ===")
             return True
 
         except Exception as e:
-            logger.error(f"Daily update failed: {e}")
+            logger.error(f"Flight update failed: {e}")
             import traceback
             traceback.print_exc()
             return False
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Daily OLC flight update with state tracking')
-    parser.add_argument('--airport-code', '-a', required=True, help='Airport code (e.g., STERL1)')    parser.add_argument('--force', '-f', action='store_true', help='Force regenerate everything (ignore state)')
+    parser = argparse.ArgumentParser(description='OLC flight update with state tracking')
+    parser.add_argument('--airport-code', '-a', required=True, help='Airport code (e.g., STERL1)')
+    parser.add_argument('--force', '-f', action='store_true', help='Force regenerate everything (ignore state)')
+    parser.add_argument('--skip-commit', action='store_true', help='Skip git commit and push')
+    parser.add_argument('--workflow-type', default='local', help='Workflow type (daily, manual, local)')
     args = parser.parse_args()
 
-    updater = DailyUpdater(
-        airport_code=args.airport_code,        force=args.force
+    updater = FlightUpdater(
+        airport_code=args.airport_code,
+        force=args.force,
+        skip_commit=args.skip_commit,
+        workflow_type=args.workflow_type
     )
 
     success = updater.run()

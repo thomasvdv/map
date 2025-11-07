@@ -1,7 +1,7 @@
 {
   "airport_code": "STERL1",
   "year": "2017",
-  "updated_at": "2025-10-29T11:55:04.891451",
+  "updated_at": "2025-11-07T11:30:32.483108",
   "flights": [
     {
       "flight_id": "",
@@ -13,6 +13,7 @@
       "filename": "2017_Phil_Gaisford_6101255.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511153",
+      "download_status": "downloaded",
       "distance": 394.64,
       "speed": 82.31,
       "aircraft": "Duo Discus"
@@ -27,6 +28,7 @@
       "filename": "2017_Tom_Orsini_6101164.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511166",
+      "download_status": "downloaded",
       "distance": 389.77,
       "speed": 76.51,
       "aircraft": "LS 10/18m"
@@ -41,37 +43,40 @@
       "filename": "2017_David_Joyce_6101462.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511172",
+      "download_status": "downloaded",
       "distance": 259.19,
       "speed": 74.25,
       "aircraft": "ASW 20"
     },
     {
-      "flight_id": "",
+      "flight_id": "555463384",
       "dsid": "6096140",
-      "date": "",
+      "date": "26.08.2017",
       "pilot": "Roy Bourgeois",
-      "airport": "STERL1",
+      "airport": "Airport STERL1",
       "points": 493.0,
-      "filename": "2017_Roy_Bourgeois_6096140.igc",
-      "download_url": "",
-      "downloaded_at": "2025-10-29T11:55:04.511176",
-      "distance": 478.39,
-      "speed": 77.31,
-      "aircraft": "ASG 29 18m"
+      "filename": "2017_Roy_Bourgeois_555463384.igc",
+      "download_url": "https://www.onlinecontest.org/olc-3.0/gliding/download.html?flightId=555463384",
+      "downloaded_at": "2025-11-07T11:30:32.481800",
+      "download_status": "downloaded",
+      "distance": null,
+      "speed": null,
+      "aircraft": null
     },
     {
-      "flight_id": "",
+      "flight_id": "553499150",
       "dsid": "6096036",
-      "date": "",
+      "date": "26.08.2017",
       "pilot": "Phil Gaisford",
-      "airport": "STERL1",
+      "airport": "Airport STERL1",
       "points": 440.79,
-      "filename": "2017_Phil_Gaisford_6096036.igc",
-      "download_url": "",
-      "downloaded_at": "2025-10-29T11:55:04.511180",
-      "distance": 399.67,
-      "speed": 81.35,
-      "aircraft": "Discus 2"
+      "filename": "2017_Phil_Gaisford_553499150.igc",
+      "download_url": "https://www.onlinecontest.org/olc-3.0/gliding/download.html?flightId=553499150",
+      "downloaded_at": "2025-11-07T11:30:27.498533",
+      "download_status": "downloaded",
+      "distance": null,
+      "speed": null,
+      "aircraft": null
     },
     {
       "flight_id": "",
@@ -83,6 +88,7 @@
       "filename": "2017_Ira_Blieden_6096173.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511184",
+      "download_status": "downloaded",
       "distance": 354.67,
       "speed": 69.22,
       "aircraft": "ASG 29 18m"
@@ -97,6 +103,7 @@
       "filename": "2017_Tom_Orsini_6095650.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511188",
+      "download_status": "downloaded",
       "distance": 350.8,
       "speed": 67.72,
       "aircraft": "LS 10/18m"
@@ -111,23 +118,25 @@
       "filename": "2017_Eric_Frere_6097226.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511192",
+      "download_status": "downloaded",
       "distance": 112.26,
       "speed": 91.29,
       "aircraft": "Duo Discus"
     },
     {
-      "flight_id": "",
+      "flight_id": "466838161",
       "dsid": "6093672",
-      "date": "",
+      "date": "25.08.2017",
       "pilot": "Roy Bourgeois",
-      "airport": "STERL1",
+      "airport": "Airport STERL1",
       "points": 451.38,
-      "filename": "2017_Roy_Bourgeois_6093672.igc",
-      "download_url": "",
-      "downloaded_at": "2025-10-29T11:55:04.511196",
-      "distance": 417.22,
-      "speed": 81.56,
-      "aircraft": "ASG 29 18m"
+      "filename": "2017_Roy_Bourgeois_466838161.igc",
+      "download_url": "https://www.onlinecontest.org/olc-3.0/gliding/download.html?flightId=466838161",
+      "downloaded_at": "2025-11-07T11:30:22.645919",
+      "download_status": "downloaded",
+      "distance": null,
+      "speed": null,
+      "aircraft": null
     },
     {
       "flight_id": "",
@@ -139,6 +148,7 @@
       "filename": "2017_George_J_Young_Jr_6093593.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511200",
+      "download_status": "downloaded",
       "distance": 79.93,
       "speed": 51.35,
       "aircraft": "Discus"
@@ -153,6 +163,7 @@
       "filename": "2017_David_Joyce_6093716.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511203",
+      "download_status": "downloaded",
       "distance": 53.41,
       "speed": 41.78,
       "aircraft": "ASK 21"
@@ -167,6 +178,7 @@
       "filename": "2017_Eric_Foertsch_6091693.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511207",
+      "download_status": "downloaded",
       "distance": 258.63,
       "speed": 58.99,
       "aircraft": "LS 4"
@@ -181,6 +193,7 @@
       "filename": "2017_Roy_Bourgeois_6081978.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511211",
+      "download_status": "downloaded",
       "distance": 291.03,
       "speed": 63.21,
       "aircraft": "ASG 29 18m"
@@ -195,6 +208,7 @@
       "filename": "2017_Ira_Blieden_6081972.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511214",
+      "download_status": "downloaded",
       "distance": 217.71,
       "speed": 51.62,
       "aircraft": "ASG 29 18m"
@@ -209,6 +223,7 @@
       "filename": "2017_George_J_Young_Jr_6081631.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511218",
+      "download_status": "downloaded",
       "distance": 84.66,
       "speed": 38.42,
       "aircraft": "Discus"
@@ -223,6 +238,7 @@
       "filename": "2017_George_J_Young_Jr_6067518.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511221",
+      "download_status": "downloaded",
       "distance": 82.45,
       "speed": 41.64,
       "aircraft": "Discus"
@@ -237,6 +253,7 @@
       "filename": "2017_Eric_Foertsch_6081647.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511225",
+      "download_status": "downloaded",
       "distance": 41.5,
       "speed": 54.19,
       "aircraft": "LS 4"
@@ -251,6 +268,7 @@
       "filename": "2017_David_Sherrill_6053537.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511229",
+      "download_status": "downloaded",
       "distance": 189.0,
       "speed": 48.26,
       "aircraft": "ASW 28"
@@ -265,6 +283,7 @@
       "filename": "2017_Ira_Blieden_6053713.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511232",
+      "download_status": "downloaded",
       "distance": 143.83,
       "speed": 41.42,
       "aircraft": "ASG 29 18m"
@@ -279,6 +298,7 @@
       "filename": "2017_Eric_Foertsch_6044994.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511236",
+      "download_status": "downloaded",
       "distance": 290.41,
       "speed": 67.71,
       "aircraft": "LS 4"
@@ -293,6 +313,7 @@
       "filename": "2017_Juan_Mandelbaum_6044989.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511239",
+      "download_status": "downloaded",
       "distance": 281.89,
       "speed": 71.48,
       "aircraft": "Ventus 2c/18m"
@@ -307,6 +328,7 @@
       "filename": "2017_David_Joyce_6044927.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511243",
+      "download_status": "downloaded",
       "distance": 175.54,
       "speed": 72.84,
       "aircraft": "ASW 20"
@@ -321,6 +343,7 @@
       "filename": "2017_Ira_Blieden_6045025.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511246",
+      "download_status": "downloaded",
       "distance": 170.48,
       "speed": 47.14,
       "aircraft": "ASG 29 18m"
@@ -335,6 +358,7 @@
       "filename": "2017_George_J_Young_Jr_6045278.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511250",
+      "download_status": "downloaded",
       "distance": 117.29,
       "speed": 61.52,
       "aircraft": "Discus"
@@ -349,51 +373,55 @@
       "filename": "2017_Tom_Orsini_6029798.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511254",
+      "download_status": "downloaded",
       "distance": 116.51,
       "speed": 53.23,
       "aircraft": "LS 10/18m"
     },
     {
-      "flight_id": "",
+      "flight_id": "-1610163762",
       "dsid": "6006047",
-      "date": "",
+      "date": "01.08.2017",
       "pilot": "Roy Bourgeois",
-      "airport": "STERL1",
+      "airport": "Airport STERL1",
       "points": 415.8,
-      "filename": "2017_Roy_Bourgeois_6006047.igc",
-      "download_url": "",
-      "downloaded_at": "2025-10-29T11:55:04.511257",
-      "distance": 399.34,
-      "speed": 67.7,
-      "aircraft": "ASG 29 18m"
+      "filename": "2017_Roy_Bourgeois_-1610163762.igc",
+      "download_url": "https://www.onlinecontest.org/olc-3.0/gliding/download.html?flightId=-1610163762",
+      "downloaded_at": "2025-11-07T11:30:17.672929",
+      "download_status": "downloaded",
+      "distance": null,
+      "speed": null,
+      "aircraft": null
     },
     {
-      "flight_id": "",
+      "flight_id": "-1781384077",
       "dsid": "5999133",
-      "date": "",
+      "date": "30.07.2017",
       "pilot": "Roy Bourgeois",
-      "airport": "STERL1",
+      "airport": "Airport STERL1",
       "points": 469.14,
-      "filename": "2017_Roy_Bourgeois_5999133.igc",
-      "download_url": "",
-      "downloaded_at": "2025-10-29T11:55:04.511261",
-      "distance": 432.95,
-      "speed": 72.4,
-      "aircraft": "ASG 29 18m"
+      "filename": "2017_Roy_Bourgeois_-1781384077.igc",
+      "download_url": "https://www.onlinecontest.org/olc-3.0/gliding/download.html?flightId=-1781384077",
+      "downloaded_at": "2025-11-07T11:30:13.389604",
+      "download_status": "downloaded",
+      "distance": null,
+      "speed": null,
+      "aircraft": null
     },
     {
-      "flight_id": "",
+      "flight_id": "-1778192907",
       "dsid": "5999315",
-      "date": "",
+      "date": "30.07.2017",
       "pilot": "Phil Gaisford",
-      "airport": "STERL1",
+      "airport": "Airport STERL1",
       "points": 430.73,
-      "filename": "2017_Phil_Gaisford_5999315.igc",
-      "download_url": "",
-      "downloaded_at": "2025-10-29T11:55:04.511265",
-      "distance": 403.83,
-      "speed": 77.72,
-      "aircraft": "Discus 2"
+      "filename": "2017_Phil_Gaisford_-1778192907.igc",
+      "download_url": "https://www.onlinecontest.org/olc-3.0/gliding/download.html?flightId=-1778192907",
+      "downloaded_at": "2025-11-07T11:30:08.339333",
+      "download_status": "downloaded",
+      "distance": null,
+      "speed": null,
+      "aircraft": null
     },
     {
       "flight_id": "",
@@ -405,6 +433,7 @@
       "filename": "2017_Juan_Mandelbaum_5999849.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511269",
+      "download_status": "downloaded",
       "distance": 401.73,
       "speed": 75.01,
       "aircraft": "Ventus 2c/18m"
@@ -419,6 +448,7 @@
       "filename": "2017_Steven_waitekaitis_5999110.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511272",
+      "download_status": "downloaded",
       "distance": 310.72,
       "speed": 71.77,
       "aircraft": "Duo Discus"
@@ -433,6 +463,7 @@
       "filename": "2017_Dan_MacMonagle_5999595.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511276",
+      "download_status": "downloaded",
       "distance": 286.72,
       "speed": 63.32,
       "aircraft": "ASW 20"
@@ -447,6 +478,7 @@
       "filename": "2017_Tom_Orsini_5999180.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511279",
+      "download_status": "downloaded",
       "distance": 291.28,
       "speed": 60.26,
       "aircraft": "LS 10/18m"
@@ -461,6 +493,7 @@
       "filename": "2017_Ira_Blieden_5999528.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511283",
+      "download_status": "downloaded",
       "distance": 254.4,
       "speed": 50.71,
       "aircraft": "ASG 29 18m"
@@ -475,6 +508,7 @@
       "filename": "2017_Scott_Lamont_5999065.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511287",
+      "download_status": "downloaded",
       "distance": 101.45,
       "speed": 30.01,
       "aircraft": "Schweizer, SGS 1-23E,F,G"
@@ -489,65 +523,70 @@
       "filename": "2017_Phil_Gaisford_5994615.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511290",
+      "download_status": "downloaded",
       "distance": 395.04,
       "speed": 83.34,
       "aircraft": "Discus 2"
     },
     {
-      "flight_id": "",
+      "flight_id": "1305010496",
       "dsid": "5953851",
-      "date": "",
+      "date": "16.07.2017",
       "pilot": "Bob Fletcher",
-      "airport": "STERL1",
+      "airport": "Airport STERL1",
       "points": 514.38,
-      "filename": "2017_Bob_Fletcher_5953851.igc",
-      "download_url": "",
-      "downloaded_at": "2025-10-29T11:55:04.511294",
-      "distance": 496.24,
-      "speed": 83.0,
-      "aircraft": "ASG 29 15m"
+      "filename": "2017_Bob_Fletcher_1305010496.igc",
+      "download_url": "https://www.onlinecontest.org/olc-3.0/gliding/download.html?flightId=1305010496",
+      "downloaded_at": "2025-11-07T11:30:04.003829",
+      "download_status": "downloaded",
+      "distance": null,
+      "speed": null,
+      "aircraft": null
     },
     {
-      "flight_id": "",
+      "flight_id": "1308183390",
       "dsid": "5953998",
-      "date": "",
+      "date": "16.07.2017",
       "pilot": "Tom Orsini",
-      "airport": "STERL1",
+      "airport": "Airport STERL1",
       "points": 418.84,
-      "filename": "2017_Tom_Orsini_5953998.igc",
-      "download_url": "",
-      "downloaded_at": "2025-10-29T11:55:04.511298",
-      "distance": 464.05,
-      "speed": 62.67,
-      "aircraft": "LS 10/18m"
+      "filename": "2017_Tom_Orsini_1308183390.igc",
+      "download_url": "https://www.onlinecontest.org/olc-3.0/gliding/download.html?flightId=1308183390",
+      "downloaded_at": "2025-11-07T11:29:58.852597",
+      "download_status": "downloaded",
+      "distance": null,
+      "speed": null,
+      "aircraft": null
     },
     {
-      "flight_id": "",
+      "flight_id": "1311790988",
       "dsid": "5954144",
-      "date": "",
+      "date": "16.07.2017",
       "pilot": "Juan Mandelbaum",
-      "airport": "STERL1",
+      "airport": "Airport STERL1",
       "points": 404.98,
-      "filename": "2017_Juan_Mandelbaum_5954144.igc",
-      "download_url": "",
-      "downloaded_at": "2025-10-29T11:55:04.511302",
-      "distance": 355.29,
-      "speed": 86.11,
-      "aircraft": "Duo Discus"
+      "filename": "2017_Juan_Mandelbaum_1311790988.igc",
+      "download_url": "https://www.onlinecontest.org/olc-3.0/gliding/download.html?flightId=1311790988",
+      "downloaded_at": "2025-11-07T11:29:54.485932",
+      "download_status": "downloaded",
+      "distance": null,
+      "speed": null,
+      "aircraft": null
     },
     {
-      "flight_id": "",
+      "flight_id": "1306736828",
       "dsid": "5953916",
-      "date": "",
+      "date": "16.07.2017",
       "pilot": "Glen Kelley",
-      "airport": "STERL1",
+      "airport": "Airport STERL1",
       "points": 404.82,
-      "filename": "2017_Glen_Kelley_5953916.igc",
-      "download_url": "",
-      "downloaded_at": "2025-10-29T11:55:04.511305",
-      "distance": 437.89,
-      "speed": 72.38,
-      "aircraft": "ASW 27"
+      "filename": "2017_Glen_Kelley_1306736828.igc",
+      "download_url": "https://www.onlinecontest.org/olc-3.0/gliding/download.html?flightId=1306736828",
+      "downloaded_at": "2025-11-07T11:29:49.687531",
+      "download_status": "downloaded",
+      "distance": null,
+      "speed": null,
+      "aircraft": null
     },
     {
       "flight_id": "",
@@ -559,6 +598,7 @@
       "filename": "2017_Dan_MacMonagle_5957228.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511309",
+      "download_status": "downloaded",
       "distance": 333.26,
       "speed": 64.26,
       "aircraft": "ASW 20"
@@ -573,6 +613,7 @@
       "filename": "2017_David_Joyce_5954018.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511312",
+      "download_status": "downloaded",
       "distance": 272.12,
       "speed": 62.09,
       "aircraft": "ASW 20"
@@ -587,6 +628,7 @@
       "filename": "2017_Ira_Blieden_5954242.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511316",
+      "download_status": "downloaded",
       "distance": 229.28,
       "speed": 59.11,
       "aircraft": "ASG 29 18m"
@@ -601,37 +643,40 @@
       "filename": "2017_George_J_Young_Jr_5954086.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511320",
+      "download_status": "downloaded",
       "distance": 200.81,
       "speed": 61.52,
       "aircraft": "Discus"
     },
     {
-      "flight_id": "",
+      "flight_id": "695726443",
       "dsid": "5930031",
-      "date": "",
+      "date": "09.07.2017",
       "pilot": "Roy Bourgeois",
-      "airport": "STERL1",
+      "airport": "Airport STERL1",
       "points": 482.1,
-      "filename": "2017_Roy_Bourgeois_5930031.igc",
-      "download_url": "",
-      "downloaded_at": "2025-10-29T11:55:04.511323",
-      "distance": 444.16,
-      "speed": 76.98,
-      "aircraft": "ASG 29 18m"
+      "filename": "2017_Roy_Bourgeois_695726443.igc",
+      "download_url": "https://www.onlinecontest.org/olc-3.0/gliding/download.html?flightId=695726443",
+      "downloaded_at": "2025-11-07T11:29:44.764758",
+      "download_status": "downloaded",
+      "distance": null,
+      "speed": null,
+      "aircraft": null
     },
     {
-      "flight_id": "",
+      "flight_id": "697626162",
       "dsid": "5930098",
-      "date": "",
+      "date": "09.07.2017",
       "pilot": "Phil Gaisford",
-      "airport": "STERL1",
+      "airport": "Airport STERL1",
       "points": 455.58,
-      "filename": "2017_Phil_Gaisford_5930098.igc",
-      "download_url": "",
-      "downloaded_at": "2025-10-29T11:55:04.511327",
-      "distance": 395.27,
-      "speed": 76.93,
-      "aircraft": "Discus 2"
+      "filename": "2017_Phil_Gaisford_697626162.igc",
+      "download_url": "https://www.onlinecontest.org/olc-3.0/gliding/download.html?flightId=697626162",
+      "downloaded_at": "2025-11-07T11:29:40.401807",
+      "download_status": "downloaded",
+      "distance": null,
+      "speed": null,
+      "aircraft": null
     },
     {
       "flight_id": "",
@@ -643,6 +688,7 @@
       "filename": "2017_Tom_Orsini_5930006.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511330",
+      "download_status": "downloaded",
       "distance": 348.64,
       "speed": 69.71,
       "aircraft": "LS 10/18m"
@@ -657,6 +703,7 @@
       "filename": "2017_Bob_Fletcher_5929862.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511334",
+      "download_status": "downloaded",
       "distance": 296.34,
       "speed": 72.24,
       "aircraft": "ASG 29 15m"
@@ -671,6 +718,7 @@
       "filename": "2017_David_Joyce_5930262.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511337",
+      "download_status": "downloaded",
       "distance": 241.47,
       "speed": 59.23,
       "aircraft": "ASW 20"
@@ -685,51 +733,55 @@
       "filename": "2017_George_J_Young_Jr_5930329.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.511341",
+      "download_status": "downloaded",
       "distance": 51.84,
       "speed": 43.98,
       "aircraft": "Discus"
     },
     {
-      "flight_id": "",
+      "flight_id": "269049317",
       "dsid": "5907306",
-      "date": "",
+      "date": "04.07.2017",
       "pilot": "Roy Bourgeois",
-      "airport": "STERL1",
+      "airport": "Airport STERL1",
       "points": 580.91,
-      "filename": "2017_Roy_Bourgeois_5907306.igc",
-      "download_url": "",
-      "downloaded_at": "2025-10-29T11:55:04.511345",
-      "distance": 535.16,
-      "speed": 95.45,
-      "aircraft": "ASG 29 18m"
+      "filename": "2017_Roy_Bourgeois_269049317.igc",
+      "download_url": "https://www.onlinecontest.org/olc-3.0/gliding/download.html?flightId=269049317",
+      "downloaded_at": "2025-11-07T11:29:17.528330",
+      "download_status": "downloaded",
+      "distance": null,
+      "speed": null,
+      "aircraft": null
     },
     {
-      "flight_id": "",
+      "flight_id": "280329352",
       "dsid": "5907719",
-      "date": "",
+      "date": "04.07.2017",
       "pilot": "Bob Fletcher",
-      "airport": "STERL1",
+      "airport": "Airport STERL1",
       "points": 501.27,
-      "filename": "2017_Bob_Fletcher_5907719.igc",
-      "download_url": "",
-      "downloaded_at": "2025-10-29T11:55:04.890702",
-      "distance": 473.94,
-      "speed": 89.14,
-      "aircraft": "ASG 29 15m"
+      "filename": "2017_Bob_Fletcher_280329352.igc",
+      "download_url": "https://www.onlinecontest.org/olc-3.0/gliding/download.html?flightId=280329352",
+      "downloaded_at": "2025-11-07T11:29:35.651027",
+      "download_status": "downloaded",
+      "distance": null,
+      "speed": null,
+      "aircraft": null
     },
     {
-      "flight_id": "",
+      "flight_id": "268137464",
       "dsid": "5907270",
-      "date": "",
+      "date": "04.07.2017",
       "pilot": "Phil Gaisford",
-      "airport": "STERL1",
+      "airport": "Airport STERL1",
       "points": 424.97,
-      "filename": "2017_Phil_Gaisford_5907270.igc",
-      "download_url": "",
-      "downloaded_at": "2025-10-29T11:55:04.890733",
-      "distance": 457.15,
-      "speed": 93.53,
-      "aircraft": "Discus 2"
+      "filename": "2017_Phil_Gaisford_268137464.igc",
+      "download_url": "https://www.onlinecontest.org/olc-3.0/gliding/download.html?flightId=268137464",
+      "downloaded_at": "2025-11-07T11:29:31.785260",
+      "download_status": "downloaded",
+      "distance": null,
+      "speed": null,
+      "aircraft": null
     },
     {
       "flight_id": "",
@@ -741,6 +793,7 @@
       "filename": "2017_Tom_Orsini_5907096.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890741",
+      "download_status": "downloaded",
       "distance": 373.99,
       "speed": 74.59,
       "aircraft": "LS 10/18m"
@@ -755,6 +808,7 @@
       "filename": "2017_David_Joyce_5907227.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890748",
+      "download_status": "downloaded",
       "distance": 252.32,
       "speed": 69.84,
       "aircraft": "ASW 20"
@@ -769,6 +823,7 @@
       "filename": "2017_David_Sherrill_5907448.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890754",
+      "download_status": "downloaded",
       "distance": 185.99,
       "speed": 56.78,
       "aircraft": "ASW 28"
@@ -783,6 +838,7 @@
       "filename": "2017_Max_Chtangeev_5907417.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890760",
+      "download_status": "downloaded",
       "distance": 185.92,
       "speed": 67.27,
       "aircraft": "LS 8/18m"
@@ -797,6 +853,7 @@
       "filename": "2017_Scott_Lamont_5907191.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890765",
+      "download_status": "downloaded",
       "distance": 102.04,
       "speed": 34.99,
       "aircraft": "Schweizer, SGS 1-23E,F,G"
@@ -811,6 +868,7 @@
       "filename": "2017_Tom_Orsini_5902866.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890771",
+      "download_status": "downloaded",
       "distance": 238.63,
       "speed": 62.6,
       "aircraft": "LS 10/18m"
@@ -825,6 +883,7 @@
       "filename": "2017_Roy_Bourgeois_5899228.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890776",
+      "download_status": "downloaded",
       "distance": 287.74,
       "speed": 53.55,
       "aircraft": "ASG 29 18m"
@@ -839,6 +898,7 @@
       "filename": "2017_Scott_Lamont_5899574.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890781",
+      "download_status": "downloaded",
       "distance": 49.1,
       "speed": 18.64,
       "aircraft": "Schweizer, SGS 1-23E,F,G"
@@ -853,6 +913,7 @@
       "filename": "2017_Roy_Bourgeois_5886961.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890787",
+      "download_status": "downloaded",
       "distance": 278.75,
       "speed": 83.96,
       "aircraft": "ASG 29 18m"
@@ -867,6 +928,7 @@
       "filename": "2017_David_Joyce_5887497.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890793",
+      "download_status": "downloaded",
       "distance": 210.63,
       "speed": 63.95,
       "aircraft": "ASW 20"
@@ -881,6 +943,7 @@
       "filename": "2017_Ira_Blieden_5887868.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890798",
+      "download_status": "downloaded",
       "distance": 239.92,
       "speed": 60.32,
       "aircraft": "ASG 29 18m"
@@ -895,6 +958,7 @@
       "filename": "2017_Steven_waitekaitis_5887038.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890804",
+      "download_status": "downloaded",
       "distance": 194.52,
       "speed": 64.08,
       "aircraft": "ASW 27"
@@ -909,6 +973,7 @@
       "filename": "2017_George_J_Young_Jr_5887212.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890809",
+      "download_status": "downloaded",
       "distance": 130.24,
       "speed": 66.51,
       "aircraft": "Discus"
@@ -923,6 +988,7 @@
       "filename": "2017_David_Sherrill_5890618.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890815",
+      "download_status": "downloaded",
       "distance": 122.71,
       "speed": 49.3,
       "aircraft": "ASW 28"
@@ -937,6 +1003,7 @@
       "filename": "2017_Max_Chtangeev_5907422.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890821",
+      "download_status": "downloaded",
       "distance": 157.64,
       "speed": 53.78,
       "aircraft": "LS 8/18m"
@@ -951,6 +1018,7 @@
       "filename": "2017_Glen_Kelley_5878182.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890826",
+      "download_status": "downloaded",
       "distance": 370.55,
       "speed": 64.22,
       "aircraft": "ASW 27"
@@ -965,6 +1033,7 @@
       "filename": "2017_George_J_Young_Jr_5877995.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890831",
+      "download_status": "downloaded",
       "distance": 121.35,
       "speed": 51.29,
       "aircraft": "Discus"
@@ -979,6 +1048,7 @@
       "filename": "2017_David_Joyce_5878323.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890836",
+      "download_status": "downloaded",
       "distance": 108.06,
       "speed": 47.14,
       "aircraft": "ASW 20"
@@ -993,6 +1063,7 @@
       "filename": "2017_Glen_Kelley_5847985.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890842",
+      "download_status": "downloaded",
       "distance": 119.27,
       "speed": 41.78,
       "aircraft": "ASW 27"
@@ -1007,6 +1078,7 @@
       "filename": "2017_Tom_Orsini_5826308.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890848",
+      "download_status": "downloaded",
       "distance": 239.23,
       "speed": 61.34,
       "aircraft": "LS 10/18m"
@@ -1021,6 +1093,7 @@
       "filename": "2017_Steven_waitekaitis_5826825.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890853",
+      "download_status": "downloaded",
       "distance": 202.74,
       "speed": 70.21,
       "aircraft": "ASW 27"
@@ -1035,6 +1108,7 @@
       "filename": "2017_George_J_Young_Jr_5830433.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890858",
+      "download_status": "downloaded",
       "distance": 120.48,
       "speed": 57.59,
       "aircraft": "Discus"
@@ -1049,6 +1123,7 @@
       "filename": "2017_David_Joyce_5797279.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890863",
+      "download_status": "downloaded",
       "distance": 25.1,
       "speed": 36.48,
       "aircraft": "ASW 20"
@@ -1063,6 +1138,7 @@
       "filename": "2017_Glen_Kelley_5788400.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890868",
+      "download_status": "downloaded",
       "distance": 138.68,
       "speed": 52.11,
       "aircraft": "ASW 27"
@@ -1077,6 +1153,7 @@
       "filename": "2017_George_J_Young_Jr_5788466.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890872",
+      "download_status": "downloaded",
       "distance": 90.09,
       "speed": 47.47,
       "aircraft": "Discus"
@@ -1091,6 +1168,7 @@
       "filename": "2017_Steven_waitekaitis_5770148.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890881",
+      "download_status": "downloaded",
       "distance": 194.64,
       "speed": 70.93,
       "aircraft": "ASW 27"
@@ -1105,6 +1183,7 @@
       "filename": "2017_David_Joyce_5768096.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890886",
+      "download_status": "downloaded",
       "distance": 139.79,
       "speed": 49.66,
       "aircraft": "ASW 20"
@@ -1119,6 +1198,7 @@
       "filename": "2017_Dan_MacMonagle_5733082.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890892",
+      "download_status": "downloaded",
       "distance": 217.75,
       "speed": 64.31,
       "aircraft": "ASW 20"
@@ -1133,6 +1213,7 @@
       "filename": "2017_Tom_Orsini_5732866.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890897",
+      "download_status": "downloaded",
       "distance": 218.17,
       "speed": 60.62,
       "aircraft": "LS 10/18m"
@@ -1147,6 +1228,7 @@
       "filename": "2017_Max_Chtangeev_5732698.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890902",
+      "download_status": "downloaded",
       "distance": 89.19,
       "speed": 50.84,
       "aircraft": "LS 8/18m"
@@ -1161,6 +1243,7 @@
       "filename": "2017_Roy_Bourgeois_5714086.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890907",
+      "download_status": "downloaded",
       "distance": 334.7,
       "speed": 57.92,
       "aircraft": "ASG 29 18m"
@@ -1175,6 +1258,7 @@
       "filename": "2017_Tom_Orsini_5714217.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890913",
+      "download_status": "downloaded",
       "distance": 278.44,
       "speed": 56.31,
       "aircraft": "LS 10/18m"
@@ -1189,6 +1273,7 @@
       "filename": "2017_Ira_Blieden_5714246.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890918",
+      "download_status": "downloaded",
       "distance": 137.02,
       "speed": 46.41,
       "aircraft": "ASG 29 18m"
@@ -1203,6 +1288,7 @@
       "filename": "2017_Juan_Mandelbaum_5731119.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890924",
+      "download_status": "downloaded",
       "distance": 120.44,
       "speed": 71.16,
       "aircraft": "Duo Discus"
@@ -1217,6 +1303,7 @@
       "filename": "2017_George_J_Young_Jr_5732688.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890930",
+      "download_status": "downloaded",
       "distance": 68.58,
       "speed": 44.55,
       "aircraft": "Discus"
@@ -1231,6 +1318,7 @@
       "filename": "2017_Max_Chtangeev_5685919.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890935",
+      "download_status": "downloaded",
       "distance": 85.42,
       "speed": 49.59,
       "aircraft": "LS 8/18m"
@@ -1245,6 +1333,7 @@
       "filename": "2017_Thorsten_Streppel_5679012.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890941",
+      "download_status": "downloaded",
       "distance": 192.89,
       "speed": 79.02,
       "aircraft": "ASW 27"
@@ -1259,6 +1348,7 @@
       "filename": "2017_Roy_Bourgeois_5638357.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890946",
+      "download_status": "downloaded",
       "distance": 303.87,
       "speed": 65.4,
       "aircraft": "ASG 29 18m"
@@ -1273,6 +1363,7 @@
       "filename": "2017_Tom_Orsini_5638240.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890951",
+      "download_status": "downloaded",
       "distance": 174.7,
       "speed": 48.24,
       "aircraft": "LS 10/18m"
@@ -1287,6 +1378,7 @@
       "filename": "2017_Steven_waitekaitis_5668417.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890957",
+      "download_status": "downloaded",
       "distance": 183.92,
       "speed": 62.61,
       "aircraft": "ASW 27"
@@ -1301,6 +1393,7 @@
       "filename": "2017_Phil_Gaisford_5641168.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890962",
+      "download_status": "downloaded",
       "distance": 205.92,
       "speed": 56.42,
       "aircraft": "Discus 2"
@@ -1315,6 +1408,7 @@
       "filename": "2017_Steven_waitekaitis_5639199.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890969",
+      "download_status": "downloaded",
       "distance": 31.44,
       "speed": 59.2,
       "aircraft": "ASW 27"
@@ -1329,37 +1423,40 @@
       "filename": "2017_David_Sherrill_5471026.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.890994",
+      "download_status": "downloaded",
       "distance": 11.36,
       "speed": 20.17,
       "aircraft": "ASW 28"
     },
     {
-      "flight_id": "",
+      "flight_id": "1590178652",
       "dsid": "5440027",
-      "date": "",
+      "date": "24.09.2016",
       "pilot": "Bob Fletcher",
-      "airport": "STERL1",
+      "airport": "Airport STERL1",
       "points": 463.71,
-      "filename": "2017_Bob_Fletcher_5440027.igc",
-      "download_url": "",
-      "downloaded_at": "2025-10-29T11:55:04.891002",
-      "distance": 472.21,
-      "speed": 86.15,
-      "aircraft": "ASG 29 15m"
+      "filename": "2017_Bob_Fletcher_1590178652.igc",
+      "download_url": "https://www.onlinecontest.org/olc-3.0/gliding/download.html?flightId=1590178652",
+      "downloaded_at": "2025-11-07T11:29:27.308259",
+      "download_status": "downloaded",
+      "distance": null,
+      "speed": null,
+      "aircraft": null
     },
     {
-      "flight_id": "",
+      "flight_id": "1591193742",
       "dsid": "5440047",
-      "date": "",
+      "date": "24.09.2016",
       "pilot": "Roy Bourgeois",
-      "airport": "STERL1",
+      "airport": "Airport STERL1",
       "points": 423.58,
-      "filename": "2017_Roy_Bourgeois_5440047.igc",
-      "download_url": "",
-      "downloaded_at": "2025-10-29T11:55:04.891007",
-      "distance": 417.6,
-      "speed": 82.62,
-      "aircraft": "ASG 29 18m"
+      "filename": "2017_Roy_Bourgeois_1591193742.igc",
+      "download_url": "https://www.onlinecontest.org/olc-3.0/gliding/download.html?flightId=1591193742",
+      "downloaded_at": "2025-11-07T11:29:22.338979",
+      "download_status": "downloaded",
+      "distance": null,
+      "speed": null,
+      "aircraft": null
     },
     {
       "flight_id": "",
@@ -1371,6 +1468,7 @@
       "filename": "2017_Tom_Orsini_5443037.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.891013",
+      "download_status": "downloaded",
       "distance": 181.38,
       "speed": 59.17,
       "aircraft": "DG 300"
@@ -1385,6 +1483,7 @@
       "filename": "2017_David_Sherrill_5439773.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.891018",
+      "download_status": "downloaded",
       "distance": 169.97,
       "speed": 70.62,
       "aircraft": "ASW 28"
@@ -1399,6 +1498,7 @@
       "filename": "2017_George_J_Young_Jr_5439989.igc",
       "download_url": "",
       "downloaded_at": "2025-10-29T11:55:04.891023",
+      "download_status": "downloaded",
       "distance": 153.26,
       "speed": 74.12,
       "aircraft": "Discus"

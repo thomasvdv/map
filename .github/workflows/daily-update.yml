@@ -78,9 +78,9 @@ jobs:
         env:
           AIRPORT_CODE: ${{ github.event.inputs.airport_code || 'STERL1' }}
         run: |
-          echo "Running daily update for airport: $AIRPORT_CODE"
+          echo "Checking for new flights at airport: $AIRPORT_CODE"
           echo "Satellite imagery served directly from NASA GIBS"
-          python scripts/daily_update.py --airport-code $AIRPORT_CODE
+          python scripts/update_flights.py --airport-code $AIRPORT_CODE --workflow-type github-actions
 
       - name: Upload changes to R2
         env:
@@ -90,13 +90,6 @@ jobs:
         run: |
           echo "Uploading new/changed files to R2..."
           python scripts/r2_sync.py upload
-
-      - name: Commit and push flight data and state
-        uses: ./.github/actions/commit-push-flights
-        with:
-          airport_code: ${{ github.event.inputs.airport_code || 'STERL1' }}
-          workflow_type: 'daily'
-          run_number: ${{ github.run_number }}
 
       - name: Summary
         if: always()
