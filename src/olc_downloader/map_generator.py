@@ -4110,7 +4110,8 @@ class MapGenerator:
                             console.log('Layer', layerNum, 'FeatureGroup with', childCount, 'children - polylines:', hasPolylines, 'markers:', hasMarkers);
 
                             // Routes layer has polylines but not markers
-                            if (hasPolylines && !hasMarkers && childCount < 200) {{
+                            // No childCount limit needed - this condition uniquely identifies routes
+                            if (hasPolylines && !hasMarkers) {{
                                 routesBtnLayer = layer;
                                 console.log('Found Popular Routes layer with', childCount, 'route segments');
                             }}
