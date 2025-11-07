@@ -1,11 +1,16 @@
-name: Manual Map Update
+name: OLC Flight Update
 
 on:
+  # Run daily at 2 AM UTC
+  schedule:
+    - cron: '0 2 * * *'
+
+  # Allow manual trigger from GitHub UI with options
   workflow_dispatch:
     inputs:
       airport_code:
-        description: 'Airport code (e.g., STERL1)'
-        required: true
+        description: 'Airport code to update (e.g., STERL1)'
+        required: false
         default: 'STERL1'
       year:
         description: 'Specific year to process (leave empty for all years)'
@@ -26,9 +31,9 @@ on:
         default: false
 
 jobs:
-  manual-update:
+  update-flights:
     runs-on: ubuntu-latest
-    timeout-minutes: 180  # 3 hour timeout for full regeneration
+    timeout-minutes: 120  # 2 hour timeout
 
     steps:
       - name: Checkout repository
@@ -47,7 +52,6 @@ jobs:
           pip install boto3
 
       - name: Install Playwright browsers
-        if: ${{ !inputs.skip_download }}
         run: |
           playwright install chromium
           playwright install-deps chromium
@@ -79,28 +83,27 @@ jobs:
           EOF
 
       - name: Download existing data from R2
-        if: ${{ inputs.skip_download }}
         env:
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
           echo "Downloading existing flight data from R2..."
-          python scripts/r2_sync.py download --include-flights
+          python scripts/r2_sync.py download
 
-      - name: Generate map
+      - name: Download flights and generate map
         env:
-          AIRPORT_CODE: ${{ inputs.airport_code }}
-          YEAR: ${{ inputs.year }}
-          MIN_POINTS: ${{ inputs.min_points }}
-          SKIP_DOWNLOAD: ${{ inputs.skip_download }}
-          FORCE: ${{ inputs.force_regenerate }}
+          AIRPORT_CODE: ${{ github.event.inputs.airport_code || 'STERL1' }}
+          YEAR: ${{ github.event.inputs.year }}
+          MIN_POINTS: ${{ github.event.inputs.min_points }}
+          SKIP_DOWNLOAD: ${{ github.event.inputs.skip_download }}
+          FORCE: ${{ github.event.inputs.force_regenerate }}
         run: |
-          echo "Generating map for airport: $AIRPORT_CODE"
+          echo "Processing flights for airport: $AIRPORT_CODE"
           echo "Satellite imagery served directly from NASA GIBS"
 
           # Build command with optional parameters
-          CMD="python scripts/generate_map.py --airport-code $AIRPORT_CODE --workflow-type github-actions"
+          CMD="python scripts/update_flights.py --airport-code $AIRPORT_CODE --workflow-type github-actions"
 
           [ -n "$YEAR" ] && CMD="$CMD --year $YEAR"
           [ -n "$MIN_POINTS" ] && CMD="$CMD --min-points $MIN_POINTS"
@@ -110,37 +113,33 @@ jobs:
           echo "Running: $CMD"
           eval $CMD
 
-      - name: Upload to R2
+      - name: Upload changes to R2
         env:
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
-          echo "Uploading to R2..."
-          python -m olc_downloader.cli upload-to-r2 --all --verbose
+          echo "Uploading new/changed files to R2..."
+          python scripts/r2_sync.py upload
 
-      - name: Display public URL
-        env:
-          R2_PUBLIC_DOMAIN: ${{ secrets.R2_PUBLIC_DOMAIN }}
-          AIRPORT_CODE: ${{ inputs.airport_code }}
+      - name: Summary
+        if: always()
         run: |
-          DOMAIN="${R2_PUBLIC_DOMAIN:-pub-32af5705466c411d82c79b436565f4a9.r2.dev}"
           echo "==================================="
-          echo "Map Update Complete!"
+          echo "Daily Update Complete"
           echo "==================================="
-          echo ""
-          echo "Public URL: https://$DOMAIN/maps/${AIRPORT_CODE}_map.html"
-          echo ""
-          if [ -f downloads/${AIRPORT_CODE}_map.html ]; then
-            echo "Map file generated: downloads/${AIRPORT_CODE}_map.html"
+          if [ -f update_summary.txt ]; then
+            cat update_summary.txt
+          else
+            echo "No summary available"
           fi
 
       - name: Upload logs as artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: manual-update-logs-${{ github.run_number }}
+          name: update-logs-${{ github.run_number }}
           path: |
             *.log
-            downloads/*.html
-          retention-days: 30
+            update_summary.txt
+          retention-days: 7

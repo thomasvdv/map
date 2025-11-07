@@ -33,9 +33,14 @@ logger = logging.getLogger(__name__)
 class FlightUpdater:
     """Orchestrates flight updates with state tracking"""
 
-    def __init__(self, airport_code: str, force: bool = False, skip_commit: bool = False,
+    def __init__(self, airport_code: str, year: Optional[str] = None,
+                 min_points: Optional[int] = None, skip_download: bool = False,
+                 force: bool = False, skip_commit: bool = False,
                  workflow_type: str = "local"):
         self.airport_code = airport_code
+        self.year = year
+        self.min_points = min_points
+        self.skip_download = skip_download
         self.force = force
         self.skip_commit = skip_commit
         self.workflow_type = workflow_type
@@ -98,10 +103,17 @@ class FlightUpdater:
                 'python', '-m', 'olc_downloader.cli',
                 'map',
                 '--airport-code', self.airport_code,
-                '--deployment-mode', 'static',                '--no-upload',  # Don't upload yet
+                '--deployment-mode', 'static',
+                '--no-upload',  # Don't upload yet
                 '--verbose'
             ]
 
+            if self.year:
+                cmd.extend(['--year', self.year])
+            if self.min_points:
+                cmd.extend(['--min-points', str(self.min_points)])
+            if self.skip_download:
+                cmd.append('--skip-download')
             if self.force:
                 cmd.append('--force')
 
@@ -289,13 +301,19 @@ class FlightUpdater:
 def main():
     parser = argparse.ArgumentParser(description='OLC flight update with state tracking')
     parser.add_argument('--airport-code', '-a', required=True, help='Airport code (e.g., STERL1)')
+    parser.add_argument('--year', '-y', help='Specific year to process')
+    parser.add_argument('--min-points', type=int, help='Minimum points filter')
+    parser.add_argument('--skip-download', action='store_true', help='Skip downloading flights')
     parser.add_argument('--force', '-f', action='store_true', help='Force regenerate everything (ignore state)')
     parser.add_argument('--skip-commit', action='store_true', help='Skip git commit and push')
-    parser.add_argument('--workflow-type', default='local', help='Workflow type (daily, manual, local)')
+    parser.add_argument('--workflow-type', default='local', help='Workflow type (github-actions or local)')
     args = parser.parse_args()
 
     updater = FlightUpdater(
         airport_code=args.airport_code,
+        year=args.year,
+        min_points=args.min_points,
+        skip_download=args.skip_download,
         force=args.force,
         skip_commit=args.skip_commit,
         workflow_type=args.workflow_type
