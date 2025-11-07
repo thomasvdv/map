@@ -122,6 +122,13 @@ jobs:
           echo "Uploading to R2..."
           python -m olc_downloader.cli upload-to-r2 --all --verbose
 
+      - name: Commit and push flight data and state
+        uses: ./.github/actions/commit-push-flights
+        with:
+          airport_code: ${{ inputs.airport_code }}
+          workflow_type: 'manual'
+          run_number: ${{ github.run_number }}
+
       - name: Display public URL
         env:
           R2_PUBLIC_DOMAIN: ${{ secrets.R2_PUBLIC_DOMAIN }}

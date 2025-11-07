@@ -1,0 +1,41 @@
+name: 'Commit and Push Flights'
+description: 'Commits and pushes IGC files, metadata, and state to GitHub'
+
+inputs:
+  airport_code:
+    description: 'Airport code being processed'
+    required: true
+  workflow_type:
+    description: 'Type of workflow (daily or manual)'
+    required: true
+  run_number:
+    description: 'GitHub workflow run number'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Commit and push flight data and state
+      shell: bash
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+
+        # Add IGC files and metadata
+        git add downloads/**/*.igc downloads/**/metadata.json downloads/*_state.json
+
+        # Check if there are any changes
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          echo "Committing flight data and state..."
+          git commit -m "Update flights and metadata [skip ci]
+
+        Updated by ${{ inputs.workflow_type }} workflow run #${{ inputs.run_number }}
+        Airport: ${{ inputs.airport_code }}
+
+        🤖 Generated with Claude Code"
+
+          git push
+          echo "Flight data and state committed and pushed"
+        fi

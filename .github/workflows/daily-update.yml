@@ -92,28 +92,11 @@ jobs:
           python scripts/r2_sync.py upload
 
       - name: Commit and push flight data and state
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Add IGC files and metadata
-          git add downloads/**/*.igc downloads/**/metadata.json downloads/*_state.json
-
-          # Check if there are any changes
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            echo "Committing flight data and state..."
-            git commit -m "Update flights and metadata [skip ci]
-
-          Updated by daily workflow run #${{ github.run_number }}
-          Airport: ${{ github.event.inputs.airport_code || 'STERL1' }}
-
-          🤖 Generated with Claude Code"
-
-            git push
-            echo "Flight data and state committed and pushed"
-          fi
+        uses: ./.github/actions/commit-push-flights
+        with:
+          airport_code: ${{ github.event.inputs.airport_code || 'STERL1' }}
+          workflow_type: 'daily'
+          run_number: ${{ github.run_number }}
 
       - name: Summary
         if: always()
