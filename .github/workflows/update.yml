@@ -82,15 +82,6 @@ jobs:
           R2_PUBLIC_DOMAIN=$R2_PUBLIC_DOMAIN
           EOF
 
-      - name: Download existing data from R2
-        env:
-          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
-          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-        run: |
-          echo "Downloading existing flight data from R2..."
-          python scripts/r2_sync.py download
-
       - name: Download flights and generate map
         env:
           AIRPORT_CODE: ${{ github.event.inputs.airport_code || 'STERL1' }}
