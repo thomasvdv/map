@@ -15,11 +15,12 @@ class OLCAirportFlightsSpider(scrapy.Spider):
     custom_settings = {
         'CONCURRENT_REQUESTS': 1,  # Be nice to the server
         'DOWNLOAD_DELAY': 2,
-        # Override Playwright handlers - we're using direct HTTP
+        # Use Playwright to render the page and load all table rows
         'DOWNLOAD_HANDLERS': {
-            'http': 'scrapy.core.downloader.handlers.http.HTTPDownloadHandler',
-            'https': 'scrapy.core.downloader.handlers.http.HTTPDownloadHandler',
+            'http': 'scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler',
+            'https': 'scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler',
         },
+        'TWISTED_REACTOR': 'twisted.internet.asyncioreactor.AsyncioSelectorReactor',
     }
 
     def __init__(self, airport_code=None, year=None, cookies=None, min_points=None, output_dir=None, *args, **kwargs):
@@ -137,39 +138,67 @@ class OLCAirportFlightsSpider(scrapy.Spider):
             logger.info(f"Found {from_filesystem} flights in filesystem not in metadata - will not re-scrape these")
 
     def start_requests(self):
-        """Start request using JSON API for pagination"""
+        """Start request using Playwright to render HTML table with all rows"""
         url = (
             f"https://www.onlinecontest.org/olc-3.0/gliding/flightsOfAirfield.html"
             f"?aa={self.airport_code}&st=olcp&rt=olc&c=C0&sc=&sp={self.year}"
         )
 
         logger.info(f"Fetching public flights for airport {self.airport_code}, year {self.year}")
-        logger.info(f"Using JSON API with pagination")
+        logger.info(f"Using Playwright to render HTML table with all metadata")
         logger.info(f"URL: {url}")
         logger.info(f"Cookies: {len(self.cookies)} cookies provided")
         logger.info(f"Min points filter: {self.min_points}")
         logger.info(f"Output dir: {self.output_dir}")
         logger.info(f"Already downloaded: {len(self.downloaded_dsids)} flights")
 
-        # First request to get initial batch and determine total
+        # Use Playwright to load the page and scroll to load all table rows
+        from scrapy_playwright.page import PageMethod
+
         yield scrapy.Request(
             url,
-            method='POST',
-            headers={
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Origin': 'https://www.onlinecontest.org',
-                'Referer': url,
-                'sec-fetch-dest': 'empty',
-                'sec-fetch-mode': 'cors',
-                'sec-fetch-site': 'same-origin',
-            },
-            body='{"q":"ds","offset":0}',
-            callback=self.parse_json_batch,
+            callback=self.parse,
             errback=self.errback,
             cookies={cookie['name']: cookie['value'] for cookie in self.cookies},
-            meta={'offset': 0, 'batch': 1},
-            dont_filter=True,  # Allow duplicate requests for pagination
+            meta={
+                'playwright': True,
+                'playwright_include_page': True,
+                'playwright_page_goto_kwargs': {
+                    'wait_until': 'networkidle',
+                    'timeout': 60000,
+                },
+                'playwright_page_methods': [
+                    PageMethod('wait_for_selector', 'tr[data-rid]', timeout=10000),
+                    PageMethod('evaluate', '''async () => {
+                        const scrollContainer = document.querySelector('.dataTables_scrollBody');
+                        if (!scrollContainer) {
+                            console.log('No scroll container found');
+                            return 0;
+                        }
+
+                        let prevCount = document.querySelectorAll('tr[data-rid]').length;
+                        console.log(`Initial rows: ${prevCount}`);
+
+                        for (let i = 0; i < 20; i++) {
+                            scrollContainer.scrollTop = scrollContainer.scrollHeight;
+                            await new Promise(r => setTimeout(r, 500));
+
+                            const currentCount = document.querySelectorAll('tr[data-rid]').length;
+                            if (currentCount > prevCount) {
+                                console.log(`Scroll ${i+1}: ${currentCount} rows (+${currentCount - prevCount})`);
+                                prevCount = currentCount;
+                            } else {
+                                console.log(`Scroll ${i+1}: No new rows, stopping`);
+                                break;
+                            }
+                        }
+
+                        console.log(`Final rows: ${prevCount}`);
+                        return prevCount;
+                    }'''),
+                ],
+            },
+            dont_filter=True,
         )
 
     def errback(self, failure):
@@ -410,6 +439,30 @@ class OLCAirportFlightsSpider(scrapy.Spider):
                 pilot_cell = row.xpath('.//td[@data-cn="name"]//a[contains(@href, "flightbook.html")]/text()').get()
             pilot = pilot_cell.strip() if pilot_cell else "Unknown"
 
+            # Extract distance (in km) from HTML table
+            distance_cell = row.xpath('.//td[@data-cn="km"]/text()').get()
+            distance = None
+            if distance_cell:
+                try:
+                    distance = float(distance_cell.strip())
+                except (ValueError, TypeError):
+                    pass
+
+            # Extract speed (in km/h) from HTML table
+            speed_cell = row.xpath('.//td[@data-cn="speed"]/text()').get()
+            speed = None
+            if speed_cell:
+                try:
+                    speed = float(speed_cell.strip())
+                except (ValueError, TypeError):
+                    pass
+
+            # Extract aircraft from HTML table
+            aircraft_cell = row.xpath('.//td[@data-cn="airplane"]/text()').get()
+            aircraft = None
+            if aircraft_cell:
+                aircraft = aircraft_cell.strip() if aircraft_cell.strip() else None
+
             # Airport - assume it's the airport we're searching for
             airport = f"Airport {self.airport_code}"
 
@@ -431,6 +484,9 @@ class OLCAirportFlightsSpider(scrapy.Spider):
                         "points": points,
                         "date": date,
                         "pilot": pilot,
+                        "distance": distance,  # Extracted from HTML table
+                        "speed": speed,  # Extracted from HTML table
+                        "aircraft": aircraft,  # Extracted from HTML table
                     },
                 )
 
